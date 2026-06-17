@@ -656,9 +656,9 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 // DATA
 // ======================================================
 const COMMODITIES = [
-  {id:'corn',   name:'Maíz',        icon:'🌽', basePrice:180,  unit:'bushel', market:'CME',  volClass:'high', minPrice:140, maxPrice:320, volatility:.018},
+  {id:'corn',   name:'Maíz',        icon:'🌽', basePrice:4.50, unit:'bushel', market:'CME',  volClass:'high', minPrice:3.20, maxPrice:8.50, volatility:.018},
   {id:'rice',   name:'Arroz',       icon:'🌾', basePrice:420,  unit:'ton',    market:'REG',  volClass:'low',  minPrice:380, maxPrice:480, volatility:.004},
-  {id:'coffee', name:'Café',        icon:'☕', basePrice:185,  unit:'libra',  market:'NYSE', volClass:'high', minPrice:130, maxPrice:280, volatility:.015},
+  {id:'coffee', name:'Café',        icon:'☕', basePrice:2.20, unit:'libra',  market:'NYSE', volClass:'high', minPrice:1.40, maxPrice:4.80, volatility:.015},
   {id:'oil',    name:'Petróleo',    icon:'🛢', basePrice:78,   unit:'barril', market:'Brent',volClass:'high', minPrice:55,  maxPrice:130, volatility:.016},
   {id:'gold',   name:'Oro',         icon:'🥇', basePrice:1980, unit:'oz',     market:'COMEX',volClass:'mid',  minPrice:1700,maxPrice:2500,volatility:.008},
   {id:'coal',   name:'Carbón',      icon:'⚫', basePrice:135,  unit:'ton',    market:'ICE',  volClass:'high', minPrice:90,  maxPrice:280, volatility:.014},
@@ -721,20 +721,20 @@ const HEDGES_DEF = [
 
 const FUTURES_MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const FUTURES_DEF = [
-  {id:'f1',comm:'corn',  name:'Maíz',      margin:800,  mult:1.08},
+  {id:'f1',comm:'corn',  name:'Maíz',      margin:25,   mult:1.08},
   {id:'f2',comm:'oil',   name:'Petróleo',  margin:1200, mult:1.1},
-  {id:'f3',comm:'coffee',name:'Café',      margin:600,  mult:1.12},
+  {id:'f3',comm:'coffee',name:'Café',      margin:15,   mult:1.12},
   {id:'f4',comm:'gold',  name:'Oro',       margin:2000, mult:1.06},
   {id:'f5',comm:'coal',  name:'Carbón',    margin:700,  mult:1.09},
   {id:'f6',comm:'litio', name:'Litio',     margin:3000, mult:1.15},
 ];
 
 const OPTIONS_DEF = [
-  {id:'o1',comm:'corn',  name:'Maíz',      type:'CALL',strikeAdj:1.07,prima:220},
-  {id:'o2',comm:'corn',  name:'Maíz',      type:'PUT', strikeAdj:.93, prima:190},
+  {id:'o1',comm:'corn',  name:'Maíz',      type:'CALL',strikeAdj:1.07,prima:8},
+  {id:'o2',comm:'corn',  name:'Maíz',      type:'PUT', strikeAdj:.93, prima:7},
   {id:'o3',comm:'oil',   name:'Petróleo',  type:'CALL',strikeAdj:1.08,prima:340},
   {id:'o4',comm:'oil',   name:'Petróleo',  type:'PUT', strikeAdj:.92, prima:310},
-  {id:'o5',comm:'coffee',name:'Café',      type:'CALL',strikeAdj:1.1, prima:150},
+  {id:'o5',comm:'coffee',name:'Café',      type:'CALL',strikeAdj:1.1, prima:6},
   {id:'o6',comm:'gold',  name:'Oro',       type:'PUT', strikeAdj:.95, prima:500},
   {id:'o7',comm:'litio', name:'Litio',     type:'PUT', strikeAdj:.9,  prima:800},
   {id:'o8',comm:'gas',   name:'Gas Natural',type:'CALL',strikeAdj:1.12,prima:280},
