@@ -2,133 +2,1648 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Commodity Empire Colombia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-    body{
-        margin:0;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background:#1e1e1e;
-        font-family:Arial, sans-serif;
-    }
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;--bg4:#22304a;
+  --gold:#f5c842;--green:#22c87a;--red:#f04444;--blue:#4a9eff;
+  --teal:#14b8a6;--amber:#f59e0b;--purple:#a78bfa;--orange:#fb923c;
+  --text:#e8eaf0;--text2:#8a9bb5;--border:#2a3a55;
+  --crisis:#ff2244;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center}
+.screen.active{display:flex}
 
-    .calculadora{
-        background:#2c2c2c;
-        padding:20px;
-        border-radius:15px;
-        box-shadow:0 0 15px rgba(0,0,0,0.5);
-        width:320px;
-    }
+/* ====== MENU ====== */
+#screen-menu{background:radial-gradient(ellipse at 50% 0%,#1a2a4a 0%,var(--bg) 70%)}
+.logo-wrap{text-align:center;margin-bottom:2rem}
+.logo-main{font-size:3.2rem;font-weight:700;line-height:1;letter-spacing:-1px}
+.logo-main span{color:var(--gold)}
+.logo-sub{color:var(--text2);font-size:.95rem;margin-top:.4rem}
+.menu-btn{display:block;width:300px;padding:1rem 2rem;margin:.5rem auto;border-radius:12px;border:none;font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,var(--gold),var(--amber));color:#0a0e1a}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,200,66,.4)}
+.btn-secondary{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.menu-badges{display:flex;gap:.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
+.badge{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:.3rem .8rem;font-size:.78rem;color:var(--text2)}
 
-    #pantalla{
-        width:100%;
-        height:60px;
-        margin-bottom:15px;
-        font-size:2rem;
-        text-align:right;
-        padding:10px;
-        border:none;
-        border-radius:10px;
-        background:#111;
-        color:white;
-        box-sizing:border-box;
-    }
+/* ====== TUTORIAL ====== */
+#screen-tutorial{padding:2rem;max-width:700px;margin:0 auto}
+.tut-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1rem}
+.tut-card h3{color:var(--gold);margin-bottom:.5rem}
+.tut-card p,.tut-card li{color:var(--text2);line-height:1.6;font-size:.9rem}
+.tut-card ul{padding-left:1.2rem}
+.back-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:.5rem 1.2rem;border-radius:8px;cursor:pointer;font-family:inherit;margin-top:1rem}
 
-    .botones{
-        display:grid;
-        grid-template-columns:repeat(4,1fr);
-        gap:10px;
-    }
+/* ====== STORY ====== */
+#screen-story{padding:2rem;max-width:820px;margin:0 auto;width:100%}
+.story-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2.5rem;width:100%}
+.story-header{text-align:center;margin-bottom:2rem}
+.story-header .s-emoji{font-size:3rem;display:block;margin-bottom:.8rem}
+.story-header h2{font-size:1.8rem;font-weight:700;color:var(--gold)}
+.story-header p{color:var(--text2);margin-top:.4rem;font-size:.95rem}
+.story-text{background:var(--bg3);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;color:var(--text2);line-height:1.75;font-size:.93rem;border-left:3px solid var(--gold)}
+.story-text b{color:var(--text)}
+.roles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.role-card{background:var(--bg3);border:2px solid var(--border);border-radius:14px;padding:1.2rem;cursor:pointer;transition:all .2s;text-align:center}
+.role-card:hover{border-color:var(--blue)}
+.role-card.selected{border-color:var(--gold);background:#1e2a1a}
+.role-icon{font-size:2.2rem;display:block;margin-bottom:.5rem}
+.role-name{font-weight:600;font-size:1rem;margin-bottom:.3rem}
+.role-bonus{font-size:.78rem;color:var(--teal)}
+.role-preview{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1.5rem;min-height:60px;color:var(--text2);font-size:.88rem;display:flex;align-items:center;gap:.8rem}
+.role-preview .rp-icon{font-size:1.5rem}
+#btn-start-game{width:100%;padding:1.1rem;background:linear-gradient(135deg,var(--gold),var(--amber));color:#0a0e1a;font-size:1.1rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;opacity:.5;pointer-events:none;transition:all .2s}
+#btn-start-game.ready{opacity:1;pointer-events:all}
+#btn-start-game.ready:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,200,66,.4)}
 
-    button{
-        height:60px;
-        border:none;
-        border-radius:10px;
-        font-size:1.3rem;
-        cursor:pointer;
-        transition:0.2s;
-    }
+/* ====== GAME ====== */
+#screen-game{align-items:stretch;justify-content:flex-start;padding:0}
+.game-layout{display:flex;flex-direction:column;height:100vh;width:100%}
 
-    button:hover{
-        transform:scale(1.05);
-    }
+/* METRICS BAR */
+.metrics-bar{display:flex;gap:.5rem;padding:.6rem 1rem;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.metric-cell{background:var(--bg3);border-radius:8px;padding:.4rem .75rem;min-width:90px;border:1px solid var(--border);transition:background .3s}
+.metric-cell.flash-up{animation:fup .4s ease}
+.metric-cell.flash-down{animation:fdown .4s ease}
+@keyframes fup{0%,100%{background:var(--bg3)}50%{background:rgba(34,200,122,.25)}}
+@keyframes fdown{0%,100%{background:var(--bg3)}50%{background:rgba(240,68,68,.25)}}
+.mc-label{font-size:.65rem;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.mc-value{font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:600;color:var(--green)}
+.mc-delta{font-size:.62rem;color:var(--text2)}
+.mc-delta.up{color:var(--green)}
+.mc-delta.down{color:var(--red)}
+.metric-cell.rep .mc-value{color:var(--purple)}
+.metric-cell.timer-cell .mc-value{color:var(--amber)}
+.metric-cell.date-cell .mc-value{color:var(--teal);font-size:.8rem!important}
+.metric-cell.crisis-mode{border-color:var(--crisis)!important;animation:crisis-pulse 1s infinite}
+@keyframes crisis-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,34,68,.4)}50%{box-shadow:0 0 0 4px rgba(255,34,68,.0)}}
 
-    .numero{
-        background:#3d3d3d;
-        color:white;
-    }
+/* TAB BAR */
+.tab-bar{display:flex;gap:.25rem;padding:.5rem 1rem;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto}
+.tab-btn{background:none;border:1px solid transparent;border-radius:8px;padding:.4rem .8rem;font-family:inherit;font-size:.8rem;color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--text);border-color:var(--border)}
+.tab-btn.active{background:var(--bg3);color:var(--gold);border-color:var(--gold)}
 
-    .operador{
-        background:#ff9500;
-        color:white;
-    }
+/* TAB CONTENT */
+.tab-content{flex:1;overflow-y:auto;padding:1rem}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
 
-    .igual{
-        background:#34c759;
-        color:white;
-        grid-column:span 2;
-    }
+/* MARKET TABLE */
+.market-table{width:100%;border-collapse:collapse}
+.market-table th{font-size:.72rem;color:var(--text2);text-align:left;padding:.4rem .6rem;border-bottom:1px solid var(--border);white-space:nowrap}
+.market-table td{padding:.55rem .6rem;border-bottom:1px solid rgba(42,58,85,.5);font-size:.85rem}
+.market-table tr:hover td{background:rgba(42,58,85,.4)}
+.price-cell{font-family:'JetBrains Mono',monospace;font-weight:600}
+.change-cell{font-family:'JetBrains Mono',monospace;font-size:.8rem}
+.up{color:var(--green)}
+.down{color:var(--red)}
+.neutral{color:var(--text2)}
+.comm-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.88rem}
+.vol-bar{height:4px;border-radius:2px;background:var(--border);overflow:hidden;margin-top:2px}
+.vol-fill{height:100%;border-radius:2px;transition:width .5s}
+.btn-buy,.btn-sell{padding:.3rem .7rem;border-radius:6px;border:none;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-buy{background:rgba(34,200,122,.2);color:var(--green);border:1px solid var(--green)}
+.btn-buy:hover{background:var(--green);color:#0a0e1a}
+.btn-sell{background:rgba(240,68,68,.2);color:var(--red);border:1px solid var(--red)}
+.btn-sell:hover{background:var(--red);color:#fff}
+.tag-cme{background:rgba(74,158,255,.15);color:var(--blue);border-radius:4px;padding:1px 5px;font-size:.65rem}
+.tag-reg{background:rgba(20,184,166,.15);color:var(--teal);border-radius:4px;padding:1px 5px;font-size:.65rem}
+.tag-bonus{background:rgba(34,200,122,.2);color:var(--green);border-radius:4px;padding:1px 5px;font-size:.65rem;animation:pulse-bonus 1s infinite}
+@keyframes pulse-bonus{0%,100%{opacity:1}50%{opacity:.6}}
 
-    .borrar{
-        background:#ff3b30;
-        color:white;
-    }
+/* CHARTS GRID */
+.charts-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+@media(min-width:900px){.charts-grid{grid-template-columns:repeat(4,1fr)}}
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;transition:border-color .2s}
+.chart-card:hover{border-color:var(--gold)}
+.chart-card h4{font-size:.8rem;color:var(--text2);margin-bottom:.5rem}
+.chart-card .cc-price{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:600;color:var(--text)}
+.chart-card .cc-chg{font-size:.75rem}
+.chart-card .chart-wrap{position:relative;height:65px;width:100%;margin-top:.5rem}
+
+/* INVENTORY */
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.inv-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem}
+.inv-card h4{font-size:.88rem;margin-bottom:.5rem}
+.inv-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--text2)}
+.inv-val span{color:var(--text);font-weight:600}
+
+/* FUTURES TABLE - same as market table */
+.futures-section{margin-bottom:2rem}
+.futures-section h3{font-size:.9rem;color:var(--gold);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.btn-contract{padding:.3rem .7rem;border-radius:6px;border:none;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;background:rgba(167,139,250,.2);color:var(--purple);border:1px solid var(--purple);transition:all .15s}
+.btn-contract:hover{background:var(--purple);color:#fff}
+
+/* HEDGING */
+.hedge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.hedge-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.hedge-card h4{font-size:.9rem;color:var(--amber);margin-bottom:.3rem}
+.hedge-card p{font-size:.8rem;color:var(--text2);margin-bottom.75rem}
+.btn-hedge{padding:.5rem 1rem;border-radius:8px;border:none;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--amber),var(--orange));color:#0a0e1a;width:100%;margin-top:.75rem}
+.btn-hedge:disabled{opacity:.4;cursor:not-allowed}
+.active-hedges{margin-top:1.5rem}
+.active-hedges h3{font-size:.9rem;color:var(--gold);margin-bottom:.75rem}
+.hedge-item{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
+.hedge-status{font-size:.7rem;padding:.2rem .5rem;border-radius:4px}
+.hedge-active{background:rgba(34,200,122,.2);color:var(--green)}
+.hedge-expired{background:rgba(42,58,85,.5);color:var(--text2)}
+
+/* LOGISTICS */
+.log-events{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.log-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem}
+.log-card h4{font-size:.88rem;margin-bottom:.3rem}
+.log-card p{font-size:.78rem;color:var(--text2)}
+.log-card .l-cost{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--red);margin:.5rem 0}
+.btn-log{padding:.4rem .9rem;border-radius:7px;border:none;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;background:rgba(74,158,255,.2);color:var(--blue);border:1px solid var(--blue)}
+.btn-log:hover{background:var(--blue);color:#fff}
+
+/* CONCEPTS */
+.accordion{margin-bottom:.75rem;border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.accordion-header{padding:1rem 1.2rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--bg2);font-weight:600;font-size:.92rem;user-select:none}
+.accordion-header:hover{background:var(--bg3)}
+.acc-icon{transition:transform .25s;color:var(--text2)}
+.acc-icon.open{transform:rotate(45deg);color:var(--gold)}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .35s ease;background:var(--bg3)}
+.accordion-body.open{max-height:600px}
+.accordion-body-inner{padding:1.2rem;font-size:.85rem;color:var(--text2);line-height:1.7}
+.accordion-body-inner h4{color:var(--gold);margin-bottom:.5rem;margin-top:.8rem;font-size:.88rem}
+.accordion-body-inner h4:first-child{margin-top:0}
+.accordion-body-inner .example{background:var(--bg2);border-left:3px solid var(--teal);padding:.7rem 1rem;border-radius:0 8px 8px 0;margin:.5rem 0;font-size:.82rem}
+
+/* BITACORA */
+.log-entry{padding:.6rem .8rem;border-bottom:1px solid rgba(42,58,85,.4);font-size:.8rem;display:flex;gap.6rem;align-items:flex-start}
+.log-time{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text2);min-width:40px}
+.log-good{color:var(--green)}
+.log-bad{color:var(--red)}
+.log-info{color:var(--text2)}
+.log-warn{color:var(--amber)}
+.log-crisis{color:var(--crisis);font-weight:600}
+
+/* NEWS POPUP */
+#news-popup{
+  position:fixed;top:20px;right:20px;z-index:9999;
+  background:var(--bg2);border-radius:14px;padding:1rem 1.2rem;
+  width:300px;box-shadow:0 8px 32px rgba(0,0,0,.6);
+  transform:translateX(350px);opacity:0;transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s;
+  border:2px solid var(--border);pointer-events:none;
+}
+#news-popup.type-crisis{
+  border-color:var(--crisis);background:#1a060a;
+  width:340px;box-shadow:0 0 0 3px rgba(255,34,68,.25),0 12px 40px rgba(0,0,0,.8);
+  animation:none;
+}
+#news-popup.type-crisis.show{
+  animation:crisis-popup-in .5s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes crisis-popup-in{
+  0%{transform:translateX(400px) scale(.95);opacity:0}
+  60%{transform:translateX(-10px) scale(1.02);opacity:1}
+  100%{transform:translateX(0) scale(1);opacity:1}
+}
+#news-popup.show{transform:translateX(0);opacity:1;pointer-events:all}
+#news-popup.type-global{border-color:var(--gold)}
+#news-popup.type-logistic{border-color:var(--teal)}
+#news-popup.type-crisis{border-color:var(--crisis);background:#1a0a0e}
+.popup-tag{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:.4rem;padding:.2rem .5rem;border-radius:4px;display:inline-block}
+.popup-tag.global{background:rgba(245,200,66,.2);color:var(--gold)}
+.popup-tag.logistic{background:rgba(20,184,166,.2);color:var(--teal)}
+.popup-tag.crisis{background:rgba(255,34,68,.2);color:var(--crisis)}
+.popup-title{font-size:.92rem;font-weight:600;margin-bottom:.3rem;line-height:1.3}
+.popup-title.crisis{color:var(--crisis)}
+.popup-desc{font-size:.78rem;color:var(--text2);margin-bottom:.5rem;line-height:1.5}
+.popup-effects{font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--amber)}
+.popup-bar-wrap{height:3px;background:var(--border);border-radius:2px;margin-top:.7rem;overflow:hidden}
+.popup-bar{height:100%;border-radius:2px;transition:width linear}
+.popup-bar.global{background:var(--gold)}
+.popup-bar.logistic{background:var(--teal)}
+.popup-bar.crisis{background:var(--crisis)}
+
+/* crisis CSS removed */
+
+/* TRADE MODAL */
+#trade-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:none;align-items:center;justify-content:center}
+#trade-modal.open{display:flex}
+.trade-box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem;width:340px;max-width:95vw}
+.trade-box h3{font-size:1.1rem;margin-bottom:.3rem}
+.trade-price{font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--gold);margin-bottom:1rem}
+.trade-info{background:var(--bg3);border-radius:8px;padding:.8rem;margin-bottom:1rem;font-size:.8rem;color:var(--text2);line-height:1.6}
+.qty-row{display:flex;gap:.5rem;align-items:center;margin-bottom.75rem}
+.qty-row input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.95rem;outline:none;width:100%}
+.qty-row input:focus{border-color:var(--gold)}
+.max-btn{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.5rem .6rem;font-size:.72rem;color:var(--text2);cursor:pointer;white-space:nowrap;font-family:inherit}
+.max-btn:hover{border-color:var(--gold);color:var(--gold)}
+.trade-total{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--text2);margin-bottom:1rem}
+.trade-total span{color:var(--text);font-weight:600}
+.trade-actions{display:flex;gap:.75rem}
+.btn-confirm-buy{flex:1;padding:.7rem;background:linear-gradient(135deg,var(--green),#16a358);color:#0a0e1a;font-size:.9rem;font-weight:700;border:none;border-radius:9px;cursor:pointer}
+.btn-confirm-sell{flex:1;padding:.7rem;background:linear-gradient(135deg,var(--red),#c23030);color:#fff;font-size:.9rem;font-weight:700;border:none;border-radius:9px;cursor:pointer}
+.btn-cancel{flex:1;padding:.7rem;background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:9px;cursor:pointer;font-family:inherit}
+.mode-tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.mode-tab{flex:1;padding:.5rem;text-align:center;border-radius:7px;border:1px solid var(--border);cursor:pointer;font-size:.82rem;color:var(--text2)}
+.mode-tab.active-buy{border-color:var(--green);background:rgba(34,200,122,.15);color:var(--green)}
+.mode-tab.active-sell{border-color:var(--red);background:rgba(240,68,68,.15);color:var(--red)}
+
+/* CHART MODAL */
+#chart-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1001;display:none;align-items:center;justify-content:center}
+#chart-modal.open{display:flex}
+.chart-modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.5rem;width:600px;max-width:96vw}
+.chart-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.chart-modal-header h3{font-size:1.1rem}
+.chart-modal-stats{display:flex;gap:1rem;margin-bottom:1rem}
+.cms{background:var(--bg3);border-radius:8px;padding:.5rem .8rem;font-size:.8rem;flex:1;text-align:center}
+.cms-label{color:var(--text2);font-size:.65rem;display:block}
+.cms-val{font-family:'JetBrains Mono',monospace;font-weight:600}
+.btn-close{background:none;border:1px solid var(--border);border-radius:7px;padding:.4rem .8rem;color:var(--text2);cursor:pointer;font-family:inherit}
+
+/* END SCREEN */
+#screen-end{background:radial-gradient(ellipse at 50% 30%,#1a2a1a 0%,var(--bg) 70%)}
+.end-card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2.5rem;text-align:center;max-width:560px;width:90%}
+.end-icon{font-size:4rem;display:block;margin-bottom:.5rem}
+.end-rank{font-size:1.6rem;font-weight:700;color:var(--gold);margin-bottom:.3rem}
+.end-sub{color:var(--text2);margin-bottom:1.5rem}
+.end-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.5rem}
+.end-stat{background:var(--bg3);border-radius:10px;padding:.8rem;text-align:center}
+.end-stat-val{font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:600;color:var(--green)}
+.end-stat-label{font-size:.72rem;color:var(--text2);margin-top.2rem}
+.end-analysis{background:var(--bg3);border-radius:10px;padding:1rem;text-align:left;font-size:.83rem;color:var(--text2);line-height:1.6;margin-bottom:1.5rem;border-left:3px solid var(--gold)}
+
+/* MISC */
+.section-title{font-size:.82rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:.75rem}
+.empty-state{text-align:center;padding:2rem;color:var(--text2);font-size:.88rem}
 </style>
 </head>
-
 <body>
 
-<div class="calculadora">
-    <input type="text" id="pantalla" disabled>
+<!-- ===== MENU ===== -->
+<div id="screen-menu" class="screen active">
+  <div class="logo-wrap">
+    <div class="logo-main">Commodity<span>Empire</span></div>
+    <div class="logo-sub">🇨🇴 Colombia Trading Simulator</div>
+  </div>
+  <button class="menu-btn btn-primary" onclick="showScreen('screen-story')">▶ Iniciar Partida</button>
+  <button class="menu-btn btn-secondary" onclick="showScreen('screen-tutorial')">📖 Cómo Jugar</button>
+  <div class="menu-badges">
+    <span class="badge">⏱ 15 minutos</span>
+    <span class="badge">📦 8 commodities</span>
+    <span class="badge">📚 6 módulos</span>
+    <span class="badge">🌐 Mercados globales</span>
+  </div>
+</div>
 
-    <div class="botones">
-        <button class="borrar" onclick="limpiar()">C</button>
-        <button class="operador" onclick="agregar('/')">÷</button>
-        <button class="operador" onclick="agregar('*')">×</button>
-        <button class="operador" onclick="agregar('-')">−</button>
-
-        <button class="numero" onclick="agregar('7')">7</button>
-        <button class="numero" onclick="agregar('8')">8</button>
-        <button class="numero" onclick="agregar('9')">9</button>
-        <button class="operador" onclick="agregar('+')">+</button>
-
-        <button class="numero" onclick="agregar('4')">4</button>
-        <button class="numero" onclick="agregar('5')">5</button>
-        <button class="numero" onclick="agregar('6')">6</button>
-        <button class="numero" onclick="agregar('.')">.</button>
-
-        <button class="numero" onclick="agregar('1')">1</button>
-        <button class="numero" onclick="agregar('2')">2</button>
-        <button class="numero" onclick="agregar('3')">3</button>
-        <button class="numero" onclick="agregar('0')">0</button>
-
-        <button class="igual" onclick="calcular()">=</button>
+<!-- ===== TUTORIAL ===== -->
+<div id="screen-tutorial" class="screen" style="padding:2rem;overflow-y:auto">
+  <div style="max-width:680px;margin:0 auto;width:100%">
+    <h2 style="color:var(--gold);margin-bottom:1.5rem">📖 Cómo Jugar</h2>
+    <div class="tut-card">
+      <h3>🎯 Objetivo</h3>
+      <p>Administrás <b>Andina Commodities S.A.</b> con USD $50,000. Tenés 15 minutos para maximizar tu capital comprando y vendiendo materias primas en mercados colombianos e internacionales.</p>
     </div>
+    <div class="tut-card">
+      <h3>📊 Commodities disponibles</h3>
+      <ul>
+        <li>🌽 Maíz — mercado libre CME Chicago (alta volatilidad)</li>
+        <li>🌾 Arroz — regulado por el Estado colombiano (baja volatilidad)</li>
+        <li>☕ Café — exportación (NYSE:KCH)</li>
+        <li>🛢 Petróleo — Brent internacional</li>
+        <li>🥇 Oro — refugio de valor</li>
+        <li>⚫ Carbón — exportación colombiana</li>
+        <li>⛽ Gas Natural — mercado local + exportación</li>
+        <li>🔋 Litio — emergente, alta volatilidad</li>
+      </ul>
+    </div>
+    <div class="tut-card">
+      <h3>📡 Eventos de Mercado</h3>
+      <p>Los mercados son impredecibles. Pueden llegar noticias en cualquier momento que afecten los precios. Prestá atención a las alertas y mantené siempre una estrategia de protección activa.</p>
+    </div>
+    <div class="tut-card">
+      <h3>🛡 Cobertura y Futuros</h3>
+      <p>Usá opciones y futuros en la pestaña <b>Chicago</b> para especular. Las coberturas en la pestaña <b>Coberturas</b> te protegen contra la crisis.</p>
+    </div>
+    <div class="tut-card">
+      <h3>🏆 Ranking</h3>
+      <ul>
+        <li>🥉 Comerciante Local — menos de $42,000</li>
+        <li>🥈 Gerente de Commodities — $42,000–$65,000</li>
+        <li>🥇 Director de Trading — $65,000–$95,000</li>
+        <li>🏆 Rey del Mercado Global — más de $95,000</li>
+      </ul>
+    </div>
+    <button class="back-btn" onclick="showScreen('screen-menu')">← Volver</button>
+  </div>
+</div>
+
+<!-- ===== STORY ===== -->
+<div id="screen-story" class="screen" style="padding:2rem;overflow-y:auto">
+  <div class="story-wrap" style="max-width:820px;margin:0 auto">
+    <div class="story-header">
+      <span class="s-emoji">🏢</span>
+      <h2>Andina Commodities S.A.</h2>
+      <p>Bogotá, Colombia — Enero 2025</p>
+    </div>
+    <div class="story-text">
+      Es lunes por la mañana. Llegás a la oficina en el piso 22 de la Torre Colpatria con vista a los Andes.<br><br>
+      Tu jefe —el director general— entra a tu cubículo con una taza de tinto y te dice:<br><br>
+      <b>"Esta semana los mercados globales están agitados. La FED acaba de anunciar un cambio de política, el TRM está fluctuando, y nuestros proveedores en Chicago nos están presionando. Tenés <span style="color:var(--gold)">USD $50,000</span> del fondo de operaciones. Necesito que demuestres que podés manejar esto."</b><br><br>
+      Te sienta frente a los pantallones de Bloomberg y te dice: <i>"Tenés 15 minutos. ¿Qué vas a hacer?"</i>
+    </div>
+    <div class="section-title">🎭 Elegí tu rol</div>
+    <div class="roles-grid">
+      <div class="role-card" id="role-0" onclick="selectRole(0)">
+        <span class="role-icon">📦</span>
+        <div class="role-name">Jefe de Importaciones</div>
+        <div class="role-bonus">+ Primera cobertura gratuita</div>
+      </div>
+      <div class="role-card" id="role-1" onclick="selectRole(1)">
+        <span class="role-icon">☕</span>
+        <div class="role-name">Director de Exportaciones</div>
+        <div class="role-bonus">+ 20 unidades de café</div>
+      </div>
+      <div class="role-card" id="role-2" onclick="selectRole(2)">
+        <span class="role-icon">🛢</span>
+        <div class="role-name">Trader de Energéticos</div>
+        <div class="role-bonus">+ 5 barriles petróleo + $3,000</div>
+      </div>
+      <div class="role-card" id="role-3" onclick="selectRole(3)">
+        <span class="role-icon">📊</span>
+        <div class="role-name">Gerente de Riesgo</div>
+        <div class="role-bonus">+ 3 coberturas gratis + reputación 70</div>
+      </div>
+    </div>
+    <div class="role-preview" id="role-preview">
+      <span class="rp-icon">👆</span>
+      <span>Seleccioná un rol para ver los detalles</span>
+    </div>
+    <button id="btn-start-game" onclick="startGame()">🚀 Comenzar Partida</button>
+  </div>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="screen-game" class="screen">
+  <div class="game-layout">
+    <!-- Metrics -->
+    <div class="metrics-bar" id="metrics-bar">
+      <div class="metric-cell" id="mc-money">
+        <div class="mc-label">💵 Capital</div>
+        <div class="mc-value" id="m-money">$50,000</div>
+        <div class="mc-delta" id="d-money">—</div>
+      </div>
+      <div class="metric-cell" id="mc-portfolio">
+        <div class="mc-label">📦 Portafolio</div>
+        <div class="mc-value" id="m-portfolio">$0</div>
+        <div class="mc-delta" id="d-portfolio">—</div>
+      </div>
+      <div class="metric-cell" id="mc-total">
+        <div class="mc-label">💰 Total Activos</div>
+        <div class="mc-value" id="m-total">$50,000</div>
+        <div class="mc-delta" id="d-total">—</div>
+      </div>
+      <div class="metric-cell" id="mc-trm">
+        <div class="mc-label">🇨🇴 TRM</div>
+        <div class="mc-value" id="m-trm">$4,200</div>
+        <div class="mc-delta" id="d-trm">—</div>
+      </div>
+      <div class="metric-cell rep" id="mc-rep">
+        <div class="mc-label">⭐ Reputación</div>
+        <div class="mc-value" id="m-rep">50</div>
+        <div class="mc-delta" id="d-rep">—</div>
+      </div>
+      <div class="metric-cell timer-cell" id="mc-timer">
+        <div class="mc-label">⏱ Tiempo</div>
+        <div class="mc-value" id="m-timer">15:00</div>
+        <div class="mc-delta" id="d-timer-label" style="color:var(--text2)">restante</div>
+      </div>
+      <div class="metric-cell" id="mc-date" style="margin-left:auto">
+        <div class="mc-label">📅 Fecha</div>
+        <div class="mc-value" id="m-date" style="color:var(--teal);font-size:.8rem">Lun 6 Ene</div>
+        <div class="mc-delta" id="d-date" style="color:var(--text2)">Día 1</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('mercado')">🏪 Mercado</button>
+      <button class="tab-btn" onclick="switchTab('graficos')">📈 Gráficos</button>
+      <button class="tab-btn" onclick="switchTab('inventario')">📦 Inventario</button>
+      <button class="tab-btn" onclick="switchTab('chicago')">🌽 Chicago</button>
+      <button class="tab-btn" onclick="switchTab('coberturas')">🛡 Coberturas</button>
+      <button class="tab-btn" onclick="switchTab('logistica')">🚢 Logística</button>
+      <button class="tab-btn" onclick="switchTab('conceptos')">📚 Conceptos</button>
+      <button class="tab-btn" onclick="switchTab('bitacora')">📓 Bitácora</button>
+    </div>
+
+    <!-- Tab content -->
+    <div class="tab-content">
+
+      <!-- MERCADO -->
+      <div id="tab-mercado" class="tab-pane active">
+        <table class="market-table">
+          <thead>
+            <tr>
+              <th>Commodity</th>
+              <th>Precio USD</th>
+              <th>Cambio</th>
+              <th>Volatilidad</th>
+              <th>Inventario</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="market-body"></tbody>
+        </table>
+      </div>
+
+      <!-- GRAFICOS -->
+      <div id="tab-graficos" class="tab-pane">
+        <div class="charts-grid" id="charts-grid"></div>
+      </div>
+
+      <!-- INVENTARIO -->
+      <div id="tab-inventario" class="tab-pane">
+        <div class="inv-grid" id="inv-grid"></div>
+      </div>
+
+      <!-- CHICAGO -->
+      <div id="tab-chicago" class="tab-pane">
+        <div class="futures-section">
+          <h3>📅 Contratos de Futuros</h3>
+          <table class="market-table">
+            <thead><tr><th>Activo</th><th>Vencimiento</th><th>Precio</th><th>Margen</th><th>Acción</th></tr></thead>
+            <tbody id="futures-body"></tbody>
+          </table>
+        </div>
+        <div class="futures-section">
+          <h3>⚙️ Opciones</h3>
+          <table class="market-table">
+            <thead><tr><th>Activo</th><th>Tipo</th><th>Strike</th><th>Prima</th><th>Acción</th></tr></thead>
+            <tbody id="options-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- COBERTURAS -->
+      <div id="tab-coberturas" class="tab-pane">
+        <div class="hedge-grid" id="hedge-grid"></div>
+        <div class="active-hedges">
+          <h3>🛡 Coberturas Activas</h3>
+          <div id="active-hedges-list"><div class="empty-state">No tenés coberturas activas</div></div>
+        </div>
+      </div>
+
+      <!-- LOGISTICA -->
+      <div id="tab-logistica" class="tab-pane">
+        <div class="section-title">📋 Eventos de Logística Activos</div>
+        <div class="log-events" id="log-events"><div class="empty-state">Sin eventos activos</div></div>
+      </div>
+
+      <!-- CONCEPTOS -->
+      <div id="tab-conceptos" class="tab-pane">
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>🌽 Módulo 1 — Maíz vs Arroz: Mercado Libre vs Regulado</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Qué es un mercado libre?</h4>
+            <p>El maíz en Colombia se transa a precios dictados por la <b>Bolsa de Chicago (CME Group)</b>. Esto significa que cualquier evento global —sequías en EE.UU., conflictos, política de la FED— impacta el precio inmediatamente.</p>
+            <h4>¿Y el mercado regulado?</h4>
+            <p>El arroz en Colombia tiene precio mínimo de sustentación fijado por el gobierno. El Estado interviene comprando excedentes y subsidiando para evitar colapsos. Por eso tiene <b>baja volatilidad</b>.</p>
+            <div class="example">📌 Ejemplo real: En 2022, la invasión de Ucrania disparó el maíz +40% en semanas (CME). El arroz colombiano apenas subió 3% en el mismo período.</div>
+          </div></div>
+        </div>
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>💱 Módulo 2 — TRM y Tipo de Cambio</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Qué es la TRM?</h4>
+            <p>La <b>Tasa de Cambio Representativa del Mercado</b> es el precio oficial del dólar en Colombia. La calcula el Banco de la República promediando las operaciones del día anterior.</p>
+            <h4>Impacto en commodities</h4>
+            <p>Si exportás café y el dólar sube, tus ingresos en pesos aumentan. Si importás maíz y el dólar sube, tus costos aumentan. El manejo del riesgo cambiario es clave.</p>
+            <div class="example">📌 En 2023, el dólar pasó de $4,700 a $3,800 COP en 6 meses. Importadores ganaron; exportadores perdieron.</div>
+          </div></div>
+        </div>
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>🌽 Módulo 3 — Bolsa de Chicago (CME)</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Qué es CME Group?</h4>
+            <p>El <b>Chicago Mercantile Exchange</b> es la principal bolsa de derivados de commodities del mundo. Aquí se fijan los precios de referencia del maíz, soya, trigo, petróleo y más.</p>
+            <h4>Futuros en CME</h4>
+            <p>Un contrato de futuro de maíz en CME = 5,000 bushels. Colombia usa estos precios como referencia internacional para importaciones.</p>
+            <div class="example">📌 FENALCE (Federación Nacional de Cultivadores) monitorea CME diariamente para negociar con importadores colombianos.</div>
+          </div></div>
+        </div>
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>🌐 Módulo 4 — Eventos Globales</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Cómo impactan los eventos globales?</h4>
+            <p>Guerras, decisiones de bancos centrales, fenómenos climáticos y pandemias pueden mover los precios de commodities en cuestión de horas.</p>
+            <h4>El papel de la FED</h4>
+            <p>Cuando la FED sube tasas, el dólar se fortalece y los commodities (cotizados en USD) bajan. Cuando las baja, los commodities suben.</p>
+            <div class="example">📌 En 2020, el petróleo llegó a precio negativo (-$37/barril) por un exceso de oferta durante COVID.</div>
+          </div></div>
+        </div>
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>🛡 Módulo 5 — Hedging y Derivados</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Qué es el hedging?</h4>
+            <p>El <b>hedging</b> (cobertura) es una estrategia para protegerse de movimientos adversos de precios usando contratos derivados (futuros u opciones).</p>
+            <h4>Put Option (opción de venta)</h4>
+            <p>Te da el <b>derecho</b> (no obligación) de vender a un precio fijo. Si el mercado cae, ejercés la opción y no perdés. Como un seguro de precio.</p>
+            <div class="example">📌 Bavaria cubre el precio del maíz para su producción de cerveza comprando futuros en CME meses antes.</div>
+          </div></div>
+        </div>
+        <div class="accordion">
+          <div class="accordion-header" onclick="toggleAcc(this)"><span>🚢 Módulo 6 — Logística y Cadena de Suministro</span><span class="acc-icon">+</span></div>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <h4>¿Por qué importa la logística?</h4>
+            <p>Colombia exporta por Buenaventura y Barranquilla. Un bloqueo, huelga o fenómeno climático puede encarecer el transporte y reducir márgenes.</p>
+            <h4>Costo de flete</h4>
+            <p>El índice Baltic Dry mide el costo de flete marítimo. Cuando sube, exportar es más caro. Eventos como el bloqueo del Canal de Suez afectan estos costos globalmente.</p>
+            <div class="example">📌 En 2021, el buque Ever Given bloqueó el Canal de Suez 6 días. El precio del flete marítimo subió 300% en semanas.</div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- BITACORA -->
+      <div id="tab-bitacora" class="tab-pane">
+        <div id="bitacora-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== END ===== -->
+<div id="screen-end" class="screen">
+  <div class="end-card">
+    <span class="end-icon" id="end-icon">🏆</span>
+    <div class="end-rank" id="end-title">Rey del Mercado</div>
+    <div class="end-sub" id="end-sub">Desempeño excepcional</div>
+    <div class="end-stats">
+      <div class="end-stat"><div class="end-stat-val" id="end-money">—</div><div class="end-stat-label">💵 Capital Final</div></div>
+      <div class="end-stat"><div class="end-stat-val" id="end-pf">—</div><div class="end-stat-label">📦 Portafolio</div></div>
+      <div class="end-stat"><div class="end-stat-val" id="end-rep">—</div><div class="end-stat-label">⭐ Reputación</div></div>
+      <div class="end-stat"><div class="end-stat-val" id="end-hedges">—</div><div class="end-stat-label">🛡 Coberturas OK</div></div>
+      <div class="end-stat"><div class="end-stat-val" id="end-trades">—</div><div class="end-stat-label">🔄 Operaciones</div></div>
+      <div class="end-stat"><div class="end-stat-val" id="end-score">—</div><div class="end-stat-label">🎯 Puntaje</div></div>
+    </div>
+    <div class="end-analysis" id="end-analysis"></div>
+    <button class="menu-btn btn-primary" onclick="location.reload()">🔄 Jugar de Nuevo</button>
+  </div>
+</div>
+
+<!-- NEWS POPUP -->
+<div id="news-popup">
+  <div id="popup-tag" class="popup-tag global">📡 GLOBAL</div>
+  <div class="popup-title" id="popup-title">Evento</div>
+  <div class="popup-desc" id="popup-desc"></div>
+  <div class="popup-effects" id="popup-effects"></div>
+  <div class="popup-bar-wrap"><div class="popup-bar global" id="popup-bar" style="width:100%"></div></div>
+</div>
+
+<!-- crisis banner removed -->
+
+<!-- TRADE MODAL -->
+<div id="trade-modal">
+  <div class="trade-box">
+    <h3 id="trade-comm">Commodity</h3>
+    <div class="trade-price" id="trade-price">$0.00</div>
+    <div class="mode-tabs">
+      <div id="mode-buy" class="mode-tab active-buy" onclick="setTradeMode('buy')">▲ Comprar</div>
+      <div id="mode-sell" class="mode-tab" onclick="setTradeMode('sell')">▼ Vender</div>
+    </div>
+    <div class="trade-info" id="trade-info"></div>
+    <div class="qty-row">
+      <input type="number" id="trade-qty" min="1" value="1" oninput="updateTradeTotal()">
+      <button class="max-btn" id="btn-max-units" onclick="setMaxUnits()">MAX</button>
+      <button class="max-btn" onclick="setMaxCapital()">MAX $</button>
+    </div>
+    <div class="trade-total" id="trade-total">Total: <span>$0</span></div>
+    <div class="trade-actions">
+      <button class="btn-confirm-buy" id="btn-confirm" onclick="confirmTrade()">Confirmar</button>
+      <button class="btn-cancel" onclick="closeTradeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHART MODAL -->
+<div id="chart-modal">
+  <div class="chart-modal-box">
+    <div class="chart-modal-header">
+      <h3 id="chart-modal-title">Gráfico</h3>
+      <button class="btn-close" onclick="closeChartModal()">✕ Cerrar</button>
+    </div>
+    <div class="chart-modal-stats">
+      <div class="cms"><span class="cms-label">Mínimo</span><span class="cms-val" id="cm-min">—</span></div>
+      <div class="cms"><span class="cms-label">Actual</span><span class="cms-val" id="cm-cur" style="color:var(--gold)">—</span></div>
+      <div class="cms"><span class="cms-label">Máximo</span><span class="cms-val" id="cm-max">—</span></div>
+    </div>
+    <canvas id="chart-modal-canvas" height="220"></canvas>
+  </div>
 </div>
 
 <script>
-    const pantalla = document.getElementById("pantalla");
+// ======================================================
+// DATA
+// ======================================================
+const COMMODITIES = [
+  {id:'corn',   name:'Maíz',        icon:'🌽', basePrice:180,  unit:'bushel', market:'CME',  volClass:'high', minPrice:140, maxPrice:320, volatility:.018},
+  {id:'rice',   name:'Arroz',       icon:'🌾', basePrice:420,  unit:'ton',    market:'REG',  volClass:'low',  minPrice:380, maxPrice:480, volatility:.004},
+  {id:'coffee', name:'Café',        icon:'☕', basePrice:185,  unit:'libra',  market:'NYSE', volClass:'high', minPrice:130, maxPrice:280, volatility:.015},
+  {id:'oil',    name:'Petróleo',    icon:'🛢', basePrice:78,   unit:'barril', market:'Brent',volClass:'high', minPrice:55,  maxPrice:130, volatility:.016},
+  {id:'gold',   name:'Oro',         icon:'🥇', basePrice:1980, unit:'oz',     market:'COMEX',volClass:'mid',  minPrice:1700,maxPrice:2500,volatility:.008},
+  {id:'coal',   name:'Carbón',      icon:'⚫', basePrice:135,  unit:'ton',    market:'ICE',  volClass:'high', minPrice:90,  maxPrice:280, volatility:.014},
+  {id:'gas',    name:'Gas Natural', icon:'⛽', basePrice:2.8,  unit:'MMBTU',  market:'NYMEX',volClass:'high', minPrice:1.8, maxPrice:9.5, volatility:.02},
+  {id:'litio',  name:'Litio',       icon:'🔋', basePrice:22000,unit:'ton',    market:'OTC',  volClass:'high', minPrice:14000,maxPrice:55000,volatility:.022},
+];
 
-    function agregar(valor){
-        pantalla.value += valor;
-    }
+const ROLES = [
+  {name:'Jefe de Importaciones', icon:'📦', desc:'Especialista en importaciones agrícolas. Tu red de contactos en los puertos te garantiza la primera cobertura sin costo.', apply:(G)=>{ G.freeHedges=1; }},
+  {name:'Director de Exportaciones', icon:'☕', desc:'Veterano del café colombiano. Empezás con 20 unidades de café listas para vender al mejor momento.', apply:(G)=>{ G.inventory.coffee=20; }},
+  {name:'Trader de Energéticos', icon:'🛢', desc:'Conocés los ciclos del petróleo. Empezás con 5 barriles en inventario y capital extra para aprovechar la volatilidad.', apply:(G)=>{ G.inventory.oil=5; G.money+=3000; }},
+  {name:'Gerente de Riesgo', icon:'📊', desc:'Experto en cobertura y gestión de riesgo. Tenés 3 coberturas gratuitas y mayor reputación inicial.', apply:(G)=>{ G.freeHedges=3; G.reputation=70; }},
+];
 
-    function limpiar(){
-        pantalla.value = "";
-    }
+const GLOBAL_EVENTS = [
+  {title:'FED sube tasas de interés',desc:'La Reserva Federal aumentó tasas 0.5pp. Dólar se fortalece.',effects:{corn:-.06,coffee:-.05,oil:-.04,gold:-.03,litio:-.07},trmDelta:180},
+  {title:'Sequía severa en el Corn Belt',desc:'Illinois y Iowa reportan la peor sequía en 30 años.',effects:{corn:.14,coffee:.04},trmDelta:-20},
+  {title:'OPEP recorta producción',desc:'Arabia Saudita y Rusia anuncian recorte de 1M barriles/día.',effects:{oil:.12,gas:.08,coal:.05},trmDelta:60},
+  {title:'China reactiva importaciones de soya',desc:'Beijing levanta aranceles a importaciones agrícolas de EE.UU.',effects:{corn:.08,coffee:.05,litio:.06},trmDelta:-40},
+  {title:'Tensiones en el Mar Rojo',desc:'Ataques a buques comerciales elevan costos de flete.',effects:{oil:.07,coal:.06,gas:.05,corn:.03},trmDelta:120},
+  {title:'Reservas de oro en máximos históricos',desc:'Bancos centrales de Asia acumulan oro como reserva.',effects:{gold:.09,litio:.04},trmDelta:-30},
+  {title:'Transición energética acelera demanda de litio',desc:'Europa anuncia subsidios masivos para vehículos eléctricos.',effects:{litio:.15,gold:.02},trmDelta:-50},
+  {title:'Cosecha récord en Brasil',desc:'Brasil proyecta producción récord de café y maíz.',effects:{corn:-.08,coffee:-.1},trmDelta:-60},
+  {title:'Gasoducto Rusia-Europa suspendido',desc:'Conflicto diplomático paraliza suministro de gas natural.',effects:{gas:.18,coal:.1,oil:.06},trmDelta:90},
+  {title:'FED baja tasas 0.25pp',desc:'Señal dovish impulsa commodities y emergentes.',effects:{corn:.05,coffee:.06,gold:.07,litio:.08,oil:.04},trmDelta:-100},
+  {title:'Inundaciones en el Valle del Cauca',desc:'Cultivos colombianos de café y arroz afectados.',effects:{coffee:.09,rice:.06},trmDelta:30},
+  {title:'Acuerdo comercial Colombia-Asia',desc:'Nuevas rutas de exportación benefician carbón y café.',effects:{coal:.07,coffee:.05},trmDelta:-20},
+];
 
-    function calcular(){
-        try{
-            pantalla.value = eval(pantalla.value);
-        } catch(error){
-            pantalla.value = "Error";
-        }
+// Pre-crisis warning events (appear in red, 12-14 min mark)
+const PRECRIS_EVENTS = [
+  {title:'⚠️ ALERTA: Tensión geopolítica escala',desc:'Analistas advierten riesgo sistémico en mercados emergentes.',effects:{oil:.04,gold:.06},trmDelta:80, crisis:true},
+  {title:'⚠️ SEÑAL: Volatilidad en índices globales',desc:'VIX supera 35 puntos. Inversores buscan activos refugio.',effects:{gold:.05,litio:-.04},trmDelta:100, crisis:true},
+  {title:'⚠️ AVISO: Reservas en mínimos',desc:'Reservas internacionales de varios países en mínimos históricos.',effects:{oil:.03,coal:.04},trmDelta:120, crisis:true},
+];
+
+// Crisis events (last 3 minutes)
+const CRISIS_EVENTS = [
+  {title:'🚨 CRISIS: Colapso bancario sistémico',desc:'Banco central europeo activa protocolo de emergencia. Mercados en pánico.',effects:{corn:-.20,coffee:-.18,oil:-.22,coal:-.15,gas:-.12,litio:-.25,gold:.18,rice:.02},trmDelta:400, crisis:true},
+  {title:'🚨 CRISIS: Recesión global confirmada',desc:'FMI reduce proyección de crecimiento mundial a -2%. Commodities en caída libre.',effects:{corn:-.15,coffee:-.14,oil:-.18,coal:-.20,gas:-.16,litio:-.22,gold:.12,rice:.01},trmDelta:350, crisis:true},
+  {title:'🚨 CRISIS: Embargo energético',desc:'G7 impone embargo total a exportaciones de energía rusa. Escasez masiva.',effects:{gas:.25,oil:.15,coal:.18,gold:.08,corn:-.08},trmDelta:200, crisis:true},
+];
+
+const LOGISTIC_EVENTS = [
+  {id:'sue',title:'Bloqueo Canal de Suez',desc:'Buque varado bloquea paso. Fletes +35%',cost:1800,comm:'oil,coal'},
+  {id:'bue',title:'Huelga Buenaventura',desc:'Puerto cerrado 72h. Exportaciones suspendidas.',cost:2200,comm:'coffee,coal'},
+  {id:'balt',title:'Índice Baltic Dry sube',desc:'Fletes marítimos globales aumentan 28%.',cost:1400,comm:'corn,rice'},
+  {id:'tren',title:'Bloqueo Ferrocarril Central',desc:'Protesta bloquea vía carbón desde Drummond.',cost:1600,comm:'coal'},
+  {id:'clima',title:'Huracán en el Caribe',desc:'Ruta Barranquilla-EE.UU. temporalmente cerrada.',cost:1900,comm:'coffee,litio'},
+];
+
+const HEDGES_DEF = [
+  {id:'h1',name:'Put Maíz CME',desc:'Protege tu inventario de maíz ante caídas. Ejercido si precio cae >10%.',cost:900,duration:240,comm:'corn'},
+  {id:'h2',name:'Collar Café NYSE',desc:'Limita pérdidas en café. Combinación put+call con cobertura parcial.',cost:700,duration:200,comm:'coffee'},
+  {id:'h3',name:'Put Petróleo Brent',desc:'Seguro contra caída del crudo. Cubre inventario completo.',cost:1100,duration:300,comm:'oil'},
+  {id:'h4',name:'Swap Litio OTC',desc:'Intercambio de precio fijo para litio. Alta volatilidad cubierta.',cost:1500,duration:360,comm:'litio'},
+  {id:'h5',name:'Forward Carbón',desc:'Precio de venta garantizado para carbón. Ideal en crisis.',cost:800,duration:280,comm:'coal'},
+  {id:'h6',name:'Cobertura Total Energía',desc:'Protege toda tu posición en gas natural y petróleo.',cost:1800,duration:400,comm:'gas,oil'},
+];
+
+const FUTURES_DEF = [
+  {id:'f1',comm:'corn',  name:'Maíz Dic',  venc:'Dic 2025',margin:800,  mult:1.08},
+  {id:'f2',comm:'oil',   name:'Petróleo Feb',venc:'Feb 2026',margin:1200, mult:1.1},
+  {id:'f3',comm:'coffee',name:'Café Mar',  venc:'Mar 2026',margin:600,  mult:1.12},
+  {id:'f4',comm:'gold',  name:'Oro Ene',   venc:'Ene 2026',margin:2000, mult:1.06},
+  {id:'f5',comm:'coal',  name:'Carbón Mar',venc:'Mar 2026',margin:700,  mult:1.09},
+  {id:'f6',comm:'litio', name:'Litio Jun', venc:'Jun 2026',margin:3000, mult:1.15},
+];
+
+const OPTIONS_DEF = [
+  {id:'o1',comm:'corn',  name:'Maíz',  type:'CALL',strikeAdj:1.07,prima:220},
+  {id:'o2',comm:'corn',  name:'Maíz',  type:'PUT', strikeAdj:.93, prima:190},
+  {id:'o3',comm:'oil',   name:'Petróleo',type:'CALL',strikeAdj:1.08,prima:340},
+  {id:'o4',comm:'oil',   name:'Petróleo',type:'PUT', strikeAdj:.92, prima:310},
+  {id:'o5',comm:'coffee',name:'Café',  type:'CALL',strikeAdj:1.1, prima:150},
+  {id:'o6',comm:'gold',  name:'Oro',   type:'PUT', strikeAdj:.95, prima:500},
+  {id:'o7',comm:'litio', name:'Litio', type:'PUT', strikeAdj:.9,  prima:800},
+  {id:'o8',comm:'gas',   name:'Gas',   type:'CALL',strikeAdj:1.12,prima:280},
+];
+
+// ======================================================
+// STATE
+// ======================================================
+let G = {};
+let selectedRole = null;
+let tradeMode = 'buy';
+let tradeCommodityId = null;
+let miniCharts = {};
+let modalChart = null;
+let tab = 'mercado';
+let gameRunning = false;
+let priceInterval, timerInterval, globalEvInterval, trmInterval, logInterval, portfolioInterval;
+let popupTimer = null;
+let popupQueue = [];
+let popupShowing = false;
+let crisisStarted = false;
+let crisisAlertShown = false;
+let preCrisisWarnings = 0;
+
+function initG(){
+  G = {
+    money:50000,
+    trm:4200,
+    reputation:50,
+    timeLeft:900, // 15 minutes
+    inventory:{},
+    pricePrev:{},
+    priceHistory:{},
+    hedges:[],
+    activeLogistics:[],
+    blockedComms:{},
+    priceBonus:{},
+    tradeLog:[],
+    contracts:[],
+    freeHedges:0,
+    stats:{trades:0,hedgeOK:0,exports:0,futures:0},
+    prevMoney:50000,
+    prevPortfolio:0,
+    prevTotal:50000,
+    prevTrm:4200,
+  };
+  COMMODITIES.forEach(c=>{
+    G.inventory[c.id]=0;
+    G.priceHistory[c.id]=[];
+    G.pricePrev[c.id]=c.basePrice;
+  });
+}
+
+// ======================================================
+// SCREENS
+// ======================================================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ======================================================
+// STORY / ROLE
+// ======================================================
+const ROLE_DESCS = [
+  'Primera cobertura gratuita. Ideal para protegerte ante movimientos adversos del mercado.',
+  'Empezás con 20 unidades de café listas para vender. Gran ventaja si el precio sube.',
+  '+5 barriles de petróleo + $3,000 extra. Para aprovechar la volatilidad energética.',
+  '3 coberturas gratis + reputación 70. La mejor defensa ante la volatilidad extrema.',
+];
+
+function selectRole(i){
+  selectedRole = i;
+  document.querySelectorAll('.role-card').forEach((c,j)=>c.classList.toggle('selected',j===i));
+  const r = ROLES[i];
+  document.getElementById('role-preview').innerHTML=`<span class="rp-icon">${r.icon}</span><span><b>${r.name}</b><br>${ROLE_DESCS[i]}</span>`;
+  document.getElementById('btn-start-game').classList.add('ready');
+}
+
+// ======================================================
+// GAME START
+// ======================================================
+function startGame(){
+  if(selectedRole===null) return;
+  initG();
+  ROLES[selectedRole].apply(G);
+  showScreen('screen-game');
+  gameRunning=true;
+  renderAll();
+  startIntervals();
+  addLog('info','🎮 Partida iniciada como '+ROLES[selectedRole].name+'. ¡Buena suerte!');
+  // Schedule pre-crisis warnings at ~720s (12min) mark
+}
+
+// ======================================================
+// PRICE ENGINE
+// ======================================================
+function tickPrices(){
+  if(!gameRunning) return;
+  const isCrisis = G.timeLeft <= 180;
+  COMMODITIES.forEach(c=>{
+    const prev = G.pricePrev[c.id];
+    // Realistic volatility — damped mean reversion
+    let vol = c.volatility;
+    if(isCrisis && c.id !== 'gold' && c.id !== 'rice') vol *= 2.5;
+    if(isCrisis && c.id === 'gold') vol *= 1.2;
+    
+    // Mean reversion force
+    const mean = c.basePrice * (isCrisis && c.id!=='gold' ? 0.78 : 1.0);
+    const revert = (mean - prev) / mean * 0.04;
+    
+    // Random walk
+    const r = (Math.random() - 0.5) * 2;
+    const change = prev * (r * vol + revert);
+    
+    let newPrice = prev + change;
+    newPrice = Math.max(c.minPrice, Math.min(c.maxPrice, newPrice));
+    // Round nicely
+    newPrice = c.basePrice > 1000 ? Math.round(newPrice) : 
+               c.basePrice > 10   ? Math.round(newPrice*100)/100 :
+                                    Math.round(newPrice*1000)/1000;
+    
+    G.pricePrev[c.id] = newPrice;
+    G.priceHistory[c.id].push(newPrice);
+    if(G.priceHistory[c.id].length > 60) G.priceHistory[c.id].shift();
+  });
+  renderMarket();
+  updateMiniCharts();
+  updatePortfolioMetric();
+}
+
+function calcPortfolio(){
+  let pf=0;
+  COMMODITIES.forEach(c=>{ pf += (G.inventory[c.id]||0) * G.pricePrev[c.id]; });
+  return pf;
+}
+
+// ======================================================
+// METRICS
+// ======================================================
+function setM(id, val, prevVal, prefix='$', fmt=true){
+  const el = document.getElementById('m-'+id);
+  const del = document.getElementById('d-'+id);
+  const cell = document.getElementById('mc-'+id);
+  if(!el) return;
+  const fmtVal = fmt ? prefix+Math.round(val).toLocaleString() : val;
+  el.textContent = fmtVal;
+  if(del && prevVal !== undefined){
+    const diff = val - prevVal;
+    if(Math.abs(diff) > 1){
+      const sign = diff > 0 ? '▲' : '▼';
+      del.textContent = sign+' '+prefix+Math.abs(Math.round(diff)).toLocaleString();
+      del.className = 'mc-delta '+(diff>0?'up':'down');
+      if(cell){
+        cell.classList.remove('flash-up','flash-down');
+        void cell.offsetWidth;
+        cell.classList.add(diff>0?'flash-up':'flash-down');
+      }
     }
+  }
+}
+
+function updatePortfolioMetric(){
+  const pf = calcPortfolio();
+  const total = G.money + pf;
+  setM('money', G.money, G.prevMoney);
+  setM('portfolio', pf, G.prevPortfolio);
+  setM('total', total, G.prevTotal);
+  G.prevPortfolio = pf;
+  G.prevTotal = total;
+  G.prevMoney = G.money;
+}
+
+function updateTrmMetric(){
+  setM('trm', G.trm, G.prevTrm, '$', true);
+  G.prevTrm = G.trm;
+}
+
+// ======================================================
+// TIMER
+// ======================================================
+function getGameDate(){
+  const elapsed = 900 - G.timeLeft;
+  const dayNum = Math.floor(elapsed / 150) + 1; // 1 day = 150s
+  const dayNames = ['Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const months = ['Ene','Feb','Mar'];
+  // Start: Mon Jan 6, 2025
+  const baseDay = 6;
+  const totalDay = baseDay + dayNum - 1;
+  const month = totalDay > 31 ? 'Feb' : 'Ene';
+  const dom = totalDay > 31 ? totalDay - 31 : totalDay;
+  const dayName = dayNames[(dayNum - 1) % 6];
+  return { str: dayName + ' ' + dom + ' ' + month, dayNum };
+}
+
+function tickTimer(){
+  if(!gameRunning) return;
+  G.timeLeft--;
+  const m = Math.floor(G.timeLeft/60), s = G.timeLeft%60;
+  document.getElementById('m-timer').textContent = m+':'+(s<10?'0':'')+s;
+  const gd = getGameDate();
+  document.getElementById('m-date').textContent = gd.str;
+  document.getElementById('d-date').textContent = 'Día '+gd.dayNum+' de 6';
+  
+  const isCrisis = G.timeLeft <= 180;
+  const isPreCrisis = G.timeLeft <= 240 && G.timeLeft > 180;
+  
+  // Pre-crisis warnings (3.5-3 min mark)
+  if(G.timeLeft === 230 && preCrisisWarnings === 0){
+    firePreCrisisWarning(0); preCrisisWarnings++;
+  }
+  if(G.timeLeft === 210 && preCrisisWarnings === 1){
+    firePreCrisisWarning(1); preCrisisWarnings++;
+  }
+  if(G.timeLeft === 195 && preCrisisWarnings === 2){
+    firePreCrisisWarning(2); preCrisisWarnings++;
+  }
+  
+  // Crisis start
+  if(isCrisis && !crisisStarted){
+    crisisStarted = true;
+    startCrisis();
+  }
+  
+
+  
+  if(G.timeLeft <= 0){ endGame(); }
+}
+
+function startCrisis(){
+  // Flash metrics red
+  document.querySelectorAll('.metric-cell').forEach(c=>c.classList.add('crisis-mode'));
+  // Fire crisis event via popup
+  const ev = CRISIS_EVENTS[Math.floor(Math.random()*CRISIS_EVENTS.length)];
+  applyEvent(ev, 'crisis');
+  queuePopup(ev, 'crisis');
+  addLog('crisis','🚨 CRISIS MUNDIAL: '+ev.title);
+  // Check hedges
+  G.hedges.forEach(h=>{
+    if(h.active && h.remaining > 0){
+      const refund = h.cost * 0.4;
+      G.money += refund;
+      G.stats.hedgeOK++;
+      addLog('good','🛡 Cobertura '+h.name+' activada. Recuperaste $'+Math.round(refund).toLocaleString());
+    }
+  });
+  if(G.stats.hedgeOK===0){
+    addLog('bad','⚠️ Sin coberturas activas. La crisis impacta tu portafolio directo.');
+  }
+}
+
+function firePreCrisisWarning(idx){
+  const ev = PRECRIS_EVENTS[idx];
+  applyEvent(ev, 'crisis', 0.3);
+  queuePopup(ev,'crisis');
+  addLog('warn','⚠️ SEÑAL DE ALERTA: '+ev.title);
+}
+
+// ======================================================
+// EVENTS
+// ======================================================
+function applyEvent(ev, type, mult=1){
+  if(ev.effects){
+    COMMODITIES.forEach(c=>{
+      if(ev.effects[c.id]!==undefined){
+        let p = G.pricePrev[c.id] * (1 + ev.effects[c.id]*mult);
+        p = Math.max(c.minPrice, Math.min(c.maxPrice, p));
+        G.pricePrev[c.id] = Math.round(p*100)/100;
+      }
+    });
+  }
+  if(ev.trmDelta){
+    G.trm = Math.max(3200, Math.min(5800, G.trm + ev.trmDelta*mult + (Math.random()-.5)*60));
+    updateTrmMetric();
+  }
+}
+
+function fireGlobalEvent(){
+  if(!gameRunning || crisisStarted) return;
+  const ev = GLOBAL_EVENTS[Math.floor(Math.random()*GLOBAL_EVENTS.length)];
+  applyEvent(ev,'global');
+  queuePopup(ev,'global');
+  addLog('info','📡 '+ev.title+' — '+ev.desc);
+}
+
+function fireLogisticEvent(){
+  if(!gameRunning) return;
+  const ev = LOGISTIC_EVENTS[Math.floor(Math.random()*LOGISTIC_EVENTS.length)];
+  const comms = ev.comm.split(',');
+  const instance = {...ev, remaining:72, comms}; // 72 ticks × 5s = 6 min window
+  G.activeLogistics.push(instance);
+  // Block sale of affected commodities
+  comms.forEach(c=>{ G.blockedComms[c] = (G.blockedComms[c]||0)+1; });
+  queuePopup(ev,'logistic');
+  addLog('warn','🚢 '+ev.title+' — Venta de '+comms.map(c=>{const x=COMMODITIES.find(y=>y.id===c);return x?x.icon+x.name:c}).join(', ')+' BLOQUEADA');
+  if(tab==='logistica') renderLogistica();
+  if(tab==='mercado') renderMarket();
+}
+
+function tickTrm(){
+  if(!gameRunning) return;
+  const delta = (Math.random()-.5)*120 + (Math.random()>.6?80:-30);
+  G.trm = Math.max(3200, Math.min(5800, G.trm + delta));
+  G.trm = Math.round(G.trm);
+  updateTrmMetric();
+}
+
+// ======================================================
+// POPUP
+// ======================================================
+function queuePopup(ev, type){
+  if(type === 'crisis'){
+    popupQueue.unshift({ev, type}); // crisis goes first
+  } else {
+    popupQueue.push({ev, type});
+  }
+  if(!popupShowing) showNextPopup();
+}
+
+function showNextPopup(){
+  if(!popupQueue.length){ popupShowing=false; return; }
+  popupShowing=true;
+  const {ev,type} = popupQueue.shift();
+  const popup = document.getElementById('news-popup');
+  const tag = document.getElementById('popup-tag');
+  const bar = document.getElementById('popup-bar');
+  
+  popup.className = 'show type-'+type;
+  tag.className = 'popup-tag '+type;
+  tag.textContent = type==='crisis'?'🚨 CRISIS MUNDIAL':type==='global'?'📡 GLOBAL':'🚢 LOGÍSTICA';
+  document.getElementById('popup-title').className = 'popup-title'+(type==='crisis'?' crisis':'');
+  document.getElementById('popup-title').textContent = ev.title;
+  document.getElementById('popup-desc').textContent = ev.desc||'';
+  
+  let eff='';
+  if(ev.effects) Object.entries(ev.effects).forEach(([k,v])=>{
+    const c=COMMODITIES.find(x=>x.id===k);
+    if(c) eff+=(v>0?'▲':'▼')+' '+c.name+' '+(Math.abs(v)*100).toFixed(0)+'%  ';
+  });
+  document.getElementById('popup-effects').textContent=eff;
+  bar.className='popup-bar '+type;
+  bar.style.width='100%';
+  bar.style.transition='width 7s linear';
+  setTimeout(()=>bar.style.width='0%', 50);
+  
+  const duration = type === 'crisis' ? 12000 : 7000;
+  if(popupTimer) clearTimeout(popupTimer);
+  popupTimer = setTimeout(()=>{
+    popup.classList.remove('show');
+    setTimeout(showNextPopup, 400);
+  }, duration);
+}
+
+// ======================================================
+// RENDER
+// ======================================================
+function renderAll(){
+  renderMarket();
+  renderCharts();
+  renderInventario();
+  renderChicago();
+  renderCoberturas();
+  renderLogistica();
+  renderBitacora();
+  updatePortfolioMetric();
+  updateTrmMetric();
+  document.getElementById('m-rep').textContent=G.reputation;
+}
+
+function renderMarket(){
+  const tbody = document.getElementById('market-body');
+  if(!tbody) return;
+  tbody.innerHTML = COMMODITIES.map(c=>{
+    const price = G.pricePrev[c.id];
+    const hist = G.priceHistory[c.id];
+    const prev = hist.length>1?hist[hist.length-2]:price;
+    const chg = ((price-prev)/prev*100);
+    const chgStr = (chg>=0?'+':'')+chg.toFixed(2)+'%';
+    const chgCls = chg>0?'up':chg<0?'down':'neutral';
+    const volPct = Math.min(100,(c.volatility/0.025)*100);
+    const tag = c.market==='REG'?'<span class="tag-reg">Regulado</span>':'<span class="tag-cme">'+c.market+'</span>';
+    const bonusTag = G.priceBonus[c.id]?' <span class="tag-bonus">⚡ Precio Pref.</span>':'';
+    const inv = G.inventory[c.id]||0;
+    const fmtPrice = price>=100?'$'+price.toFixed(2):'$'+price.toFixed(3);
+    return `<tr>
+      <td><span class="comm-badge">${c.icon} ${c.name}</span> ${tag}${bonusTag}</td>
+      <td class="price-cell">${fmtPrice}<br><small style="color:var(--text2);font-size:.68rem">/&nbsp;${c.unit}</small></td>
+      <td class="change-cell ${chgCls}">${chgStr}</td>
+      <td><div class="vol-bar"><div class="vol-fill" style="width:${volPct}%;background:${c.volClass==='high'?'var(--red)':c.volClass==='mid'?'var(--amber)':'var(--green)'}"></div></div><small style="font-size:.68rem;color:var(--text2)">${c.volClass==='high'?'Alta':c.volClass==='mid'?'Media':'Baja'}</small></td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.82rem">${inv} ${c.unit}s</td>
+      <td style="display:flex;gap:.4rem;align-items:center">
+        <button class="btn-buy" onclick="openTrade('${c.id}','buy')">▲ Comprar</button>
+        <button class="btn-sell" onclick="openTrade('${c.id}','sell')" ${inv===0||G.blockedComms[c.id]>0?'disabled style="opacity:.4"':''}>
+          ${G.blockedComms[c.id]>0?'🔒 Bloqueado':'▼ Vender'}
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ======================================================
+// CHARTS
+// ======================================================
+function renderCharts(){
+  const grid = document.getElementById('charts-grid');
+  if(!grid) return;
+  grid.innerHTML = COMMODITIES.map(c=>`
+    <div class="chart-card" onclick="openChartModal('${c.id}')">
+      <h4>${c.icon} ${c.name}</h4>
+      <div class="cc-price" id="ccp-${c.id}">$${c.basePrice}</div>
+      <div class="cc-chg" id="ccch-${c.id}" style="color:var(--text2)">—</div>
+      <div class="chart-wrap"><canvas id="mc-${c.id}"></canvas></div>
+    </div>
+  `).join('');
+  COMMODITIES.forEach(c=>buildMiniChart(c));
+}
+
+function buildMiniChart(c){
+  const ctx = document.getElementById('mc-'+c.id);
+  if(!ctx) return;
+  const hist = G.priceHistory[c.id].slice(-30);
+  miniCharts[c.id] = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:hist.map((_,i)=>i),
+      datasets:[{data:hist,borderColor:c.volClass==='high'?'#f5c842':c.volClass==='low'?'#14b8a6':'#4a9eff',borderWidth:1.5,pointRadius:0,tension:.3,fill:true,backgroundColor:'rgba(245,200,66,.05)'}]
+    },
+    options:{animation:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}},responsive:true,maintainAspectRatio:false,layout:{padding:0}}
+  });
+}
+
+function updateMiniCharts(){
+  COMMODITIES.forEach(c=>{
+    const chart = miniCharts[c.id];
+    if(!chart) return;
+    const hist = G.priceHistory[c.id].slice(-30);
+    chart.data.labels = hist.map((_,i)=>i);
+    chart.data.datasets[0].data = hist;
+    chart.update('none');
+    
+    const price = G.pricePrev[c.id];
+    const pp = document.getElementById('ccp-'+c.id);
+    const pch = document.getElementById('ccch-'+c.id);
+    if(pp) pp.textContent = price>=100?'$'+price.toFixed(2):'$'+price.toFixed(3);
+    if(pch && hist.length>1){
+      const chg=((price-hist[0])/hist[0]*100);
+      pch.textContent=(chg>=0?'▲ +':'▼ ')+chg.toFixed(2)+'%';
+      pch.style.color=chg>=0?'var(--green)':'var(--red)';
+    }
+  });
+}
+
+function openChartModal(id){
+  const c = COMMODITIES.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('chart-modal').classList.add('open');
+  document.getElementById('chart-modal-title').textContent=c.icon+' '+c.name;
+  const hist = G.priceHistory[c.id];
+  const price = G.pricePrev[c.id];
+  document.getElementById('cm-cur').textContent='$'+price.toFixed(2);
+  document.getElementById('cm-min').textContent='$'+Math.min(...hist,price).toFixed(2);
+  document.getElementById('cm-max').textContent='$'+Math.max(...hist,price).toFixed(2);
+  
+  if(modalChart) modalChart.destroy();
+  const ctx = document.getElementById('chart-modal-canvas');
+  modalChart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:hist.map((_,i)=>i+'s'),
+      datasets:[{label:c.name,data:hist,borderColor:'#f5c842',backgroundColor:'rgba(245,200,66,.08)',borderWidth:2,pointRadius:0,tension:.3,fill:true}]
+    },
+    options:{animation:false,plugins:{legend:{display:false}},scales:{x:{display:false,grid:{color:'rgba(42,58,85,.5)'}},y:{grid:{color:'rgba(42,58,85,.5)'},ticks:{color:'#8a9bb5',font:{size:10}}}}}
+  });
+}
+
+function closeChartModal(){
+  document.getElementById('chart-modal').classList.remove('open');
+}
+
+// ======================================================
+// INVENTARIO
+// ======================================================
+function renderInventario(){
+  const grid = document.getElementById('inv-grid');
+  if(!grid) return;
+  const items = COMMODITIES.filter(c=>G.inventory[c.id]>0);
+  if(!items.length){ grid.innerHTML='<div class="empty-state">Sin inventario. Comprá en el Mercado.</div>'; return; }
+  grid.innerHTML = items.map(c=>{
+    const qty = G.inventory[c.id];
+    const price = G.pricePrev[c.id];
+    const val = qty*price;
+    return `<div class="inv-card">
+      <h4>${c.icon} ${c.name}</h4>
+      <div class="inv-val">Cantidad: <span>${qty} ${c.unit}s</span></div>
+      <div class="inv-val">Precio actual: <span>$${price.toFixed(2)}</span></div>
+      <div class="inv-val">Valor: <span style="color:var(--green)">$${Math.round(val).toLocaleString()}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ======================================================
+// CHICAGO
+// ======================================================
+function renderChicago(){
+  const fb = document.getElementById('futures-body');
+  const ob = document.getElementById('options-body');
+  if(!fb||!ob) return;
+  fb.innerHTML = FUTURES_DEF.map(f=>{
+    const c=COMMODITIES.find(x=>x.id===f.comm);
+    const fp = G.pricePrev[f.comm]*f.mult;
+    const owned = G.contracts.filter(x=>x.id===f.id).length;
+    return `<tr>
+      <td>${c.icon} ${f.name}</td>
+      <td style="color:var(--text2);font-size:.78rem">${f.venc}</td>
+      <td class="price-cell">$${fp.toFixed(2)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">$${f.margin.toLocaleString()}</td>
+      <td><button class="btn-contract" onclick="buyFuture('${f.id}')">${owned>0?'('+owned+') ':''}Contratar</button></td>
+    </tr>`;
+  }).join('');
+  ob.innerHTML = OPTIONS_DEF.map(o=>{
+    const c=COMMODITIES.find(x=>x.id===o.comm);
+    const strike=(G.pricePrev[o.comm]*o.strikeAdj).toFixed(2);
+    return `<tr>
+      <td>${c.icon} ${o.name}</td>
+      <td style="color:${o.type==='CALL'?'var(--green)':'var(--red)'};font-weight:600">${o.type}</td>
+      <td class="price-cell">$${strike}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">$${o.prima}</td>
+      <td><button class="btn-contract" onclick="buyOption('${o.id}')">Comprar</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function buyFuture(id){
+  const f=FUTURES_DEF.find(x=>x.id===id);
+  if(!f) return;
+  if(G.money<f.margin){ addLog('bad','❌ Capital insuficiente para el margen'); return; }
+  G.money-=f.margin;
+  G.contracts.push({...f, bought: G.pricePrev[f.comm]});
+  G.stats.futures++;
+  addLog('info','📅 Futuro '+f.name+' contratado. Margen: $'+f.margin.toLocaleString());
+  updatePortfolioMetric();
+  if(tab==='chicago') renderChicago();
+}
+
+function buyOption(id){
+  const o=OPTIONS_DEF.find(x=>x.id===id);
+  if(!o) return;
+  if(G.money<o.prima){ addLog('bad','❌ Capital insuficiente para la prima'); return; }
+  G.money-=o.prima;
+  G.stats.futures++;
+  const c=COMMODITIES.find(x=>x.id===o.comm);
+  addLog('info','⚙️ Opción '+o.type+' '+c.name+' comprada. Prima: $'+o.prima);
+  updatePortfolioMetric();
+}
+
+// ======================================================
+// COBERTURAS
+// ======================================================
+function renderCoberturas(){
+  const grid = document.getElementById('hedge-grid');
+  if(!grid) return;
+  grid.innerHTML = HEDGES_DEF.map(h=>{
+    const owned = G.hedges.find(x=>x.id===h.id&&x.active);
+    const realCost = G.freeHedges>0?0:h.cost;
+    return `<div class="hedge-card">
+      <h4>🛡 ${h.name}</h4>
+      <p>${h.desc}</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--amber);margin:.5rem 0">
+        ${realCost===0?'<span style="color:var(--green)">GRATIS (bono de rol)</span>':'Costo: $'+h.cost.toLocaleString()}
+        &nbsp;|&nbsp; Duración: ${Math.floor(h.duration/60)}min
+      </div>
+      <button class="btn-hedge" onclick="activateHedge('${h.id}')" ${owned?'disabled':''}>
+        ${owned?'✅ Activa':'Activar Cobertura'}
+      </button>
+    </div>`;
+  }).join('');
+  
+  const list = document.getElementById('active-hedges-list');
+  if(!G.hedges.length){ list.innerHTML='<div class="empty-state">No tenés coberturas activas</div>'; return; }
+  list.innerHTML = G.hedges.map(h=>`
+    <div class="hedge-item">
+      <div>
+        <div style="font-weight:600">${h.name}</div>
+        <div style="color:var(--text2);font-size:.72rem">Comm: ${h.comm}</div>
+      </div>
+      <span class="hedge-status ${h.active&&h.remaining>0?'hedge-active':'hedge-expired'}">
+        ${h.active&&h.remaining>0?'Activa ('+Math.ceil(h.remaining/60)+'min)':'Expirada'}
+      </span>
+    </div>
+  `).join('');
+}
+
+function activateHedge(id){
+  const h=HEDGES_DEF.find(x=>x.id===id);
+  if(!h) return;
+  const cost = G.freeHedges>0?0:h.cost;
+  if(G.money<cost){ addLog('bad','❌ Capital insuficiente para la cobertura'); return; }
+  G.money-=cost;
+  if(G.freeHedges>0) G.freeHedges--;
+  G.hedges.push({...h, active:true, remaining:h.duration, cost:h.cost});
+  addLog('good','🛡 Cobertura '+h.name+' activada'+(cost===0?' (GRATIS)':' por $'+cost.toLocaleString()));
+  updatePortfolioMetric();
+  renderCoberturas();
+}
+
+function tickHedges(){
+  G.hedges.forEach(h=>{ if(h.active&&h.remaining>0){ h.remaining--; if(h.remaining<=0) h.active=false; } });
+  // Tick logistics
+  G.activeLogistics.forEach(ev=>{
+    if(ev.remaining>0){
+      ev.remaining--;
+      if(ev.remaining<=0){
+        // Expired unresolved — apply inventory penalty
+        ev.comms.forEach(c=>{
+          if(G.blockedComms[c]>0) G.blockedComms[c]--;
+          const inv=G.inventory[c]||0;
+          if(inv>0){
+            const pen=Math.round(inv*G.pricePrev[c]*0.08);
+            G.money=Math.max(0,G.money-pen);
+            const cx=COMMODITIES.find(y=>y.id===c);
+            addLog('bad','💸 Penalización logística ('+ev.title+'): perdiste $'+pen.toLocaleString()+' en '+cx.icon+cx.name);
+          }
+        });
+        addLog('bad','⏰ Evento logístico expiró sin resolver: '+ev.title);
+        if(tab==='mercado') renderMarket();
+        if(tab==='logistica') renderLogistica();
+      }
+    }
+  });
+  G.activeLogistics=G.activeLogistics.filter(x=>x.remaining>0);
+  // Tick price bonuses
+  Object.keys(G.priceBonus).forEach(c=>{
+    if(G.priceBonus[c].remaining>0){ G.priceBonus[c].remaining--; }
+    else delete G.priceBonus[c];
+  });
+}
+
+// ======================================================
+// LOGISTICA
+// ======================================================
+function renderLogistica(){
+  const el = document.getElementById('log-events');
+  if(!el) return;
+  const active = G.activeLogistics.filter(function(x){return x.remaining>0;});
+  if(!active.length){ el.innerHTML='<div class="empty-state">Sin eventos logísticos activos</div>'; return; }
+  let html = '';
+  active.forEach(function(ev, i){
+    const secsLeft = ev.remaining * 5;
+    const mLeft = Math.floor(secsLeft/60);
+    const sLeft = secsLeft % 60;
+    const timeStr = mLeft + 'm ' + (sLeft<10?'0':'') + sLeft + 's';
+    const urgent = ev.remaining < 18;
+    const urgentColor = urgent ? 'var(--red)' : 'var(--amber)';
+    const borderColor = urgent ? 'var(--red)' : 'var(--border)';
+    const affNames = (ev.comms||[]).map(function(c){
+      const x = COMMODITIES.find(function(y){return y.id===c;});
+      return x ? x.icon+' '+x.name : c;
+    }).join(', ');
+    const penEst = (ev.comms||[]).reduce(function(sum,c){
+      const inv = G.inventory[c]||0;
+      return sum + Math.round(inv * G.pricePrev[c] * 0.08);
+    }, 0);
+    html += '<div class="log-card" style="border-color:'+borderColor+'">';
+    html += '<h4>🚢 '+ev.title+'</h4>';
+    html += '<p style="margin-bottom:.5rem">'+ev.desc+'</p>';
+    html += '<div style="font-size:.75rem;background:rgba(240,68,68,.1);border-radius:6px;padding:.5rem;margin:.4rem 0;border-left:3px solid var(--red)">🔒 <b>Venta bloqueada:</b> '+affNames+'</div>';
+    if(penEst>0) html += '<div style="font-size:.75rem;color:var(--red);margin:.3rem 0">⚠️ Penalización si expira: -$'+penEst.toLocaleString()+'</div>';
+    html += '<div class="l-cost">Costo para resolver: $'+ev.cost.toLocaleString()+'</div>';
+    html += '<div style="font-size:.72rem;color:'+urgentColor+';font-weight:600;margin-bottom:.6rem">⏰ Expira en: '+timeStr+'</div>';
+    html += '<button class="btn-log" onclick="payLogistic('+i+')">✅ Resolver por $'+ev.cost.toLocaleString()+'</button>';
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+function payLogistic(i){
+  const ev=G.activeLogistics[i];
+  if(!ev) return;
+  if(G.money<ev.cost){ addLog('bad','❌ Sin capital para resolver la logística'); return; }
+  G.money-=ev.cost;
+  // Unblock commodities
+  ev.comms.forEach(c=>{ if(G.blockedComms[c]>0) G.blockedComms[c]--; });
+  // Grant 45-second preferential price bonus
+  ev.comms.forEach(c=>{ G.priceBonus[c] = {discount:.07, remaining:9}; }); // 9 ticks × 5s = 45s
+  ev.remaining=0;
+  G.reputation=Math.min(100,G.reputation+5);
+  const names=ev.comms.map(c=>{const x=COMMODITIES.find(y=>y.id===c);return x?x.icon+' '+x.name:c}).join(', ');
+  addLog('good','✅ Logística resuelta: '+ev.title+'. +5 reputación. Precio preferencial en '+names+' por 45s');
+  updatePortfolioMetric();
+  if(tab==='logistica') renderLogistica();
+  if(tab==='mercado') renderMarket();
+}
+
+// ======================================================
+// BITACORA
+// ======================================================
+function renderBitacora(){
+  const el=document.getElementById('bitacora-list');
+  if(!el) return;
+  if(!G.tradeLog.length){ el.innerHTML='<div class="empty-state">Sin registros aún</div>'; return; }
+  el.innerHTML=G.tradeLog.map(e=>`
+    <div class="log-entry">
+      <span class="log-time">${e.time}</span>
+      <span class="${e.cls}">${e.text}</span>
+    </div>
+  `).join('');
+}
+
+// ======================================================
+// TRADE MODAL
+// ======================================================
+function openTrade(id, mode){
+  tradeCommodityId=id;
+  const c=COMMODITIES.find(x=>x.id===id);
+  tradeMode=mode;
+  document.getElementById('trade-modal').classList.add('open');
+  document.getElementById('trade-comm').textContent=c.icon+' '+c.name;
+  document.getElementById('trade-price').textContent='$'+G.pricePrev[id].toFixed(c.basePrice>100?2:3)+' / '+c.unit;
+  document.getElementById('trade-qty').value=1;
+  
+  const inv=G.inventory[id]||0;
+  document.getElementById('trade-info').innerHTML=
+    `Capital disponible: <b>$${Math.round(G.money).toLocaleString()}</b><br>Inventario actual: <b>${inv} ${c.unit}s</b>`;
+  
+  setTradeMode(mode);
+  updateTradeTotal();
+}
+
+function setTradeMode(m){
+  tradeMode=m;
+  const bc=document.getElementById('btn-confirm');
+  const mb=document.getElementById('mode-buy');
+  const ms=document.getElementById('mode-sell');
+  mb.className='mode-tab'+(m==='buy'?' active-buy':'');
+  ms.className='mode-tab'+(m==='sell'?' active-sell':'');
+  bc.className=m==='buy'?'btn-confirm-buy':'btn-confirm-sell';
+  bc.textContent=m==='buy'?'✅ Comprar':'🔴 Vender';
+  updateTradeTotal();
+}
+
+function setMaxUnits(){
+  const c=COMMODITIES.find(x=>x.id===tradeCommodityId);
+  if(tradeMode==='sell'){
+    document.getElementById('trade-qty').value=G.inventory[tradeCommodityId]||0;
+  } else {
+    const maxQ=Math.floor(G.money/G.pricePrev[tradeCommodityId]);
+    document.getElementById('trade-qty').value=maxQ;
+  }
+  updateTradeTotal();
+}
+
+function setMaxCapital(){
+  const price=G.pricePrev[tradeCommodityId];
+  const maxQ=Math.floor(G.money/price);
+  document.getElementById('trade-qty').value=maxQ;
+  updateTradeTotal();
+}
+
+function updateTradeTotal(){
+  const qty=parseInt(document.getElementById('trade-qty').value)||0;
+  const price=G.pricePrev[tradeCommodityId]||0;
+  const total=qty*price;
+  const tt=document.getElementById('trade-total');
+  if(tt) tt.innerHTML=`Total: <span>$${Math.round(total).toLocaleString()}</span>`;
+  
+  const maxBtn=document.getElementById('btn-max-units');
+  if(maxBtn) maxBtn.textContent=tradeMode==='sell'?'MAX unidades':'MAX unidades';
+}
+
+function confirmTrade(){
+  const c=COMMODITIES.find(x=>x.id===tradeCommodityId);
+  const qty=parseInt(document.getElementById('trade-qty').value)||0;
+  if(qty<=0){ addLog('bad','❌ Cantidad inválida'); closeTradeModal(); return; }
+  const price=G.pricePrev[c.id];
+  const total=qty*price;
+  
+  if(tradeMode==='buy'){
+    const bonus=G.priceBonus[c.id];
+    const effPrice=bonus?price*(1-bonus.discount):price;
+    const effTotal=qty*effPrice;
+    if(G.money<effTotal){ addLog('bad','❌ Capital insuficiente. Necesitás $'+Math.round(effTotal).toLocaleString()); closeTradeModal(); return; }
+    G.money-=effTotal;
+    G.inventory[c.id]=(G.inventory[c.id]||0)+qty;
+    G.stats.trades++;
+    const bonusNote=bonus?' (⚡ precio preferencial -7%)':'';
+    addLog('good','✅ Compra: '+qty+' '+c.unit+'s de '+c.name+' por $'+Math.round(effTotal).toLocaleString()+bonusNote);
+  } else {
+    const inv=G.inventory[c.id]||0;
+    if(inv<qty){ addLog('bad','❌ Inventario insuficiente. Tenés '+inv+' unidades'); closeTradeModal(); return; }
+    G.money+=total;
+    G.inventory[c.id]-=qty;
+    G.stats.trades++;
+    G.stats.exports++;
+    addLog('good','💚 Venta: '+qty+' '+c.unit+'s de '+c.name+' por $'+Math.round(total).toLocaleString());
+  }
+  
+  updatePortfolioMetric();
+  if(tab==='inventario') renderInventario();
+  if(tab==='mercado') renderMarket();
+  closeTradeModal();
+}
+
+function closeTradeModal(){
+  document.getElementById('trade-modal').classList.remove('open');
+}
+
+// ======================================================
+// TAB SWITCH
+// ======================================================
+function switchTab(t){
+  tab=t;
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const ts=['mercado','graficos','inventario','chicago','coberturas','logistica','conceptos','bitacora'];
+    b.classList.toggle('active',ts[i]===t);
+  });
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  
+  if(t==='graficos'){ renderCharts(); }
+  else if(t==='inventario') renderInventario();
+  else if(t==='chicago') renderChicago();
+  else if(t==='coberturas') renderCoberturas();
+  else if(t==='logistica') renderLogistica();
+  else if(t==='bitacora') renderBitacora();
+}
+
+// ======================================================
+// ACCORDION
+// ======================================================
+function toggleAcc(header){
+  const icon=header.querySelector('.acc-icon');
+  const body=header.nextElementSibling;
+  const open=body.classList.contains('open');
+  body.classList.toggle('open',!open);
+  icon.classList.toggle('open',!open);
+}
+
+// ======================================================
+// INTERVALS
+// ======================================================
+function startIntervals(){
+  tickPrices();
+  priceInterval    = setInterval(tickPrices, 5000);
+  timerInterval    = setInterval(tickTimer, 1000);
+  trmInterval      = setInterval(tickTrm, 10000);
+  globalEvInterval = setInterval(fireGlobalEvent, 55000);
+  logInterval      = setInterval(fireLogisticEvent, 90000);
+  portfolioInterval= setInterval(()=>{ tickHedges(); if(tab==='coberturas') renderCoberturas(); }, 5000);
+}
+
+// ======================================================
+// UTILITIES
+// ======================================================
+function addLog(cls,text){
+  const m={good:'log-good',bad:'log-bad',info:'log-info',warn:'log-warn',crisis:'log-crisis'};
+  G.tradeLog.unshift({time:tStr(),text,cls:m[cls]||''});
+  if(G.tradeLog.length>100) G.tradeLog.pop();
+  if(tab==='bitacora') renderBitacora();
+}
+
+function tStr(){
+  const elapsed=900-G.timeLeft;
+  const m=Math.floor(elapsed/60),s=elapsed%60;
+  return m+':'+(s<10?'0':'')+s;
+}
+
+// ======================================================
+// END GAME
+// ======================================================
+function endGame(){
+  gameRunning=false;
+  clearInterval(priceInterval);
+  clearInterval(timerInterval);
+  clearInterval(trmInterval);
+  clearInterval(globalEvInterval);
+  clearInterval(logInterval);
+  clearInterval(portfolioInterval);
+  
+  const pf=calcPortfolio();
+  const score=G.money+pf+G.reputation*300+G.stats.hedgeOK*1500+G.stats.trades*100+G.stats.exports*250+G.stats.futures*200;
+  
+  let rank;
+  if(score>95000) rank={icon:'🏆',title:'Rey del Mercado Global',sub:'Desempeño excepcional'};
+  else if(score>65000) rank={icon:'🥇',title:'Director de Trading',sub:'Alto rendimiento y gestión de riesgo'};
+  else if(score>42000) rank={icon:'🥈',title:'Gerente de Commodities',sub:'Buen manejo con margen de mejora'};
+  else rank={icon:'🥉',title:'Comerciante Local',sub:'El mercado global tiene mucho por enseñarte'};
+  
+  document.getElementById('end-icon').textContent=rank.icon;
+  document.getElementById('end-title').textContent=rank.title;
+  document.getElementById('end-sub').textContent=rank.sub;
+  document.getElementById('end-money').textContent='$'+Math.round(G.money).toLocaleString();
+  document.getElementById('end-pf').textContent='$'+Math.round(pf).toLocaleString();
+  document.getElementById('end-rep').textContent=G.reputation;
+  document.getElementById('end-hedges').textContent=G.stats.hedgeOK;
+  document.getElementById('end-trades').textContent=G.stats.trades;
+  document.getElementById('end-score').textContent=Math.round(score).toLocaleString();
+  
+  let an='';
+  const rn=selectedRole!==null?ROLES[selectedRole].name:'';
+  if(rn) an+='Jugaste como '+rn+'. ';
+  if(!G.stats.hedgeOK) an+='No activaste coberturas — la crisis impactó directo en tu portafolio. ';
+  else an+='Tus '+G.stats.hedgeOK+' coberturas te protegieron en la crisis mundial. ';
+  if(G.money>65000) an+='Excelente gestión del capital. ';
+  else if(G.money<35000) an+='El capital cayó significativamente — revisá la estrategia. ';
+  an+='Recordá: el maíz (CME) es volátil y global; el arroz (regulado) es predecible y local.';
+  document.getElementById('end-analysis').textContent=an;
+  
+  showScreen('screen-end');
+}
+
+// ======================================================
+// KEYBOARD
+// ======================================================
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ closeTradeModal(); closeChartModal(); }
+});
 </script>
-
 </body>
 </html>
