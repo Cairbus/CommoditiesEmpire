@@ -142,6 +142,8 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
 .futures-section h3{font-size:.9rem;color:var(--gold);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
 .btn-contract{padding:.3rem .7rem;border-radius:6px;border:none;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;background:rgba(167,139,250,.2);color:var(--purple);border:1px solid var(--purple);transition:all .15s}
 .btn-contract:hover{background:var(--purple);color:#fff}
+.future-price-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.3rem .5rem;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.8rem;width:90px;outline:none}
+.future-price-input:focus{border-color:var(--gold)}
 
 /* HEDGING */
 .hedge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
@@ -305,7 +307,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <h2 style="color:var(--gold);margin-bottom:1.5rem">📖 Cómo Jugar</h2>
     <div class="tut-card">
       <h3>🎯 Objetivo</h3>
-      <p>Administrás <b>Andina Commodities S.A.</b> con USD $50,000. Tenés 15 minutos para maximizar tu capital comprando y vendiendo materias primas en mercados colombianos e internacionales.</p>
+      <p>Administrás <b>Andina Commodities S.A.</b> con USD $200,000. Tenés 15 minutos para maximizar tu capital comprando y vendiendo materias primas en mercados colombianos e internacionales.</p>
     </div>
     <div class="tut-card">
       <h3>📊 Commodities disponibles</h3>
@@ -352,7 +354,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="story-text">
       Es lunes por la mañana. Llegás a la oficina en el piso 22 de la Torre Colpatria con vista a los Andes.<br><br>
       Tu jefe —el director general— entra a tu cubículo con una taza de tinto y te dice:<br><br>
-      <b>"Esta semana los mercados globales están agitados. La FED acaba de anunciar un cambio de política, el TRM está fluctuando, y nuestros proveedores en Chicago nos están presionando. Tenés <span style="color:var(--gold)">USD $50,000</span> del fondo de operaciones. Necesito que demuestres que podés manejar esto."</b><br><br>
+      <b>"Esta semana los mercados globales están agitados. La FED acaba de anunciar un cambio de política, el TRM está fluctuando, y nuestros proveedores en Chicago nos están presionando. Tenés <span style="color:var(--gold)">USD $200,000</span> del fondo de operaciones. Necesito que demuestres que podés manejar esto."</b><br><br>
       Te sienta frente a los pantallones de Bloomberg y te dice: <i>"Tenés 15 minutos. ¿Qué vas a hacer?"</i>
     </div>
     <div class="section-title">🎭 Elegí tu rol</div>
@@ -393,7 +395,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="metrics-bar" id="metrics-bar">
       <div class="metric-cell" id="mc-money">
         <div class="mc-label">💵 Capital</div>
-        <div class="mc-value" id="m-money">$50,000</div>
+        <div class="mc-value" id="m-money">$200,000</div>
         <div class="mc-delta" id="d-money">—</div>
       </div>
       <div class="metric-cell" id="mc-portfolio">
@@ -403,7 +405,7 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
       </div>
       <div class="metric-cell" id="mc-total">
         <div class="mc-label">💰 Total Activos</div>
-        <div class="mc-value" id="m-total">$50,000</div>
+        <div class="mc-value" id="m-total">$200,000</div>
         <div class="mc-delta" id="d-total">—</div>
       </div>
       <div class="metric-cell" id="mc-trm">
@@ -432,8 +434,8 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('mercado')">🏪 Mercado</button>
       <button class="tab-btn" onclick="switchTab('graficos')">📈 Gráficos</button>
-      <button class="tab-btn" onclick="switchTab('inventario')">📦 Inventario</button>
-      <button class="tab-btn" onclick="switchTab('chicago')">🌽 Chicago</button>
+      <button class="tab-btn" onclick="switchTab('portafolio')">📦 Portafolio</button>
+      <button class="tab-btn" onclick="switchTab('chicago')">🇺🇸 Chicago</button>
       <button class="tab-btn" onclick="switchTab('coberturas')">🛡 Coberturas</button>
       <button class="tab-btn" onclick="switchTab('logistica')">🚢 Logística</button>
       <button class="tab-btn" onclick="switchTab('conceptos')">📚 Conceptos</button>
@@ -466,23 +468,27 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--tex
       </div>
 
       <!-- INVENTARIO -->
-      <div id="tab-inventario" class="tab-pane">
+      <div id="tab-portafolio" class="tab-pane">
         <div class="inv-grid" id="inv-grid"></div>
       </div>
 
       <!-- CHICAGO -->
       <div id="tab-chicago" class="tab-pane">
+        <div style="background:rgba(74,158,255,.08);border:1px solid rgba(74,158,255,.3);border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.82rem;color:var(--text2)">
+          🇺🇸 <b style="color:var(--blue)">CME Group — Chicago Mercantile Exchange</b><br>
+          Estos son los contratos ofrecidos en el mercado. Podés negociar el precio de entrada de cada futuro antes de contratar.
+        </div>
         <div class="futures-section">
           <h3>📅 Contratos de Futuros</h3>
           <table class="market-table">
-            <thead><tr><th>Activo</th><th>Vencimiento</th><th>Precio</th><th>Margen</th><th>Acción</th></tr></thead>
+            <thead><tr><th>Activo</th><th>Vencimiento</th><th>Precio Ref.</th><th>Tu Precio</th><th>Margen</th><th>Acción</th></tr></thead>
             <tbody id="futures-body"></tbody>
           </table>
         </div>
         <div class="futures-section">
           <h3>⚙️ Opciones</h3>
           <table class="market-table">
-            <thead><tr><th>Activo</th><th>Tipo</th><th>Strike</th><th>Prima</th><th>Acción</th></tr></thead>
+            <thead><tr><th>Activo</th><th>Tipo</th><th>Vencimiento</th><th>Strike</th><th>Prima/c</th><th>Cant.</th><th>Acción</th></tr></thead>
             <tbody id="options-body"></tbody>
           </table>
         </div>
@@ -663,7 +669,7 @@ const COMMODITIES = [
 const ROLES = [
   {name:'Jefe de Importaciones', icon:'📦', desc:'Especialista en importaciones agrícolas. Tu red de contactos en los puertos te garantiza la primera cobertura sin costo.', apply:(G)=>{ G.freeHedges=1; }},
   {name:'Director de Exportaciones', icon:'☕', desc:'Veterano del café colombiano. Empezás con 20 unidades de café listas para vender al mejor momento.', apply:(G)=>{ G.inventory.coffee=20; }},
-  {name:'Trader de Energéticos', icon:'🛢', desc:'Conocés los ciclos del petróleo. Empezás con 5 barriles en inventario y capital extra para aprovechar la volatilidad.', apply:(G)=>{ G.inventory.oil=5; G.money+=3000; }},
+  {name:'Trader de Energéticos', icon:'🛢', desc:'Conocés los ciclos del petróleo. Empezás con 5 barriles en inventario y capital extra para aprovechar la volatilidad.', apply:(G)=>{ G.inventory.oil=5; G.money+=8000; }},
   {name:'Gerente de Riesgo', icon:'📊', desc:'Experto en cobertura y gestión de riesgo. Tenés 3 coberturas gratuitas y mayor reputación inicial.', apply:(G)=>{ G.freeHedges=3; G.reputation=70; }},
 ];
 
@@ -705,33 +711,52 @@ const LOGISTIC_EVENTS = [
 ];
 
 const HEDGES_DEF = [
-  {id:'h1',name:'Put Maíz CME',desc:'Protege tu inventario de maíz ante caídas. Ejercido si precio cae >10%.',cost:900,duration:240,comm:'corn'},
-  {id:'h2',name:'Collar Café NYSE',desc:'Limita pérdidas en café. Combinación put+call con cobertura parcial.',cost:700,duration:200,comm:'coffee'},
-  {id:'h3',name:'Put Petróleo Brent',desc:'Seguro contra caída del crudo. Cubre inventario completo.',cost:1100,duration:300,comm:'oil'},
-  {id:'h4',name:'Swap Litio OTC',desc:'Intercambio de precio fijo para litio. Alta volatilidad cubierta.',cost:1500,duration:360,comm:'litio'},
-  {id:'h5',name:'Forward Carbón',desc:'Precio de venta garantizado para carbón. Ideal en crisis.',cost:800,duration:280,comm:'coal'},
-  {id:'h6',name:'Cobertura Total Energía',desc:'Protege toda tu posición en gas natural y petróleo.',cost:1800,duration:400,comm:'gas,oil'},
+  {id:'h1',name:'Put Maíz CME',desc:'Protege tu portafolio de maíz ante caídas bruscas.',cost:4500,duration:90,comm:'corn'},
+  {id:'h2',name:'Collar Café NYSE',desc:'Limita pérdidas en café. Cobertura de corto plazo.',cost:3800,duration:75,comm:'coffee'},
+  {id:'h3',name:'Put Petróleo Brent',desc:'Seguro de corto plazo contra caída del crudo.',cost:5500,duration:80,comm:'oil'},
+  {id:'h4',name:'Swap Litio OTC',desc:'Cobertura express para litio. Muy volátil, muy caro.',cost:7000,duration:70,comm:'litio'},
+  {id:'h5',name:'Forward Carbón',desc:'Precio garantizado para carbón por tiempo limitado.',cost:4200,duration:85,comm:'coal'},
+  {id:'h6',name:'Cobertura Energía Total',desc:'Protege gas y petróleo simultáneamente. Caro pero amplio.',cost:9000,duration:60,comm:'gas,oil'},
 ];
 
+const FUTURES_MONTHS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const FUTURES_DEF = [
-  {id:'f1',comm:'corn',  name:'Maíz Dic',  venc:'Dic 2025',margin:800,  mult:1.08},
-  {id:'f2',comm:'oil',   name:'Petróleo Feb',venc:'Feb 2026',margin:1200, mult:1.1},
-  {id:'f3',comm:'coffee',name:'Café Mar',  venc:'Mar 2026',margin:600,  mult:1.12},
-  {id:'f4',comm:'gold',  name:'Oro Ene',   venc:'Ene 2026',margin:2000, mult:1.06},
-  {id:'f5',comm:'coal',  name:'Carbón Mar',venc:'Mar 2026',margin:700,  mult:1.09},
-  {id:'f6',comm:'litio', name:'Litio Jun', venc:'Jun 2026',margin:3000, mult:1.15},
+  {id:'f1',comm:'corn',  name:'Maíz',      margin:800,  mult:1.08},
+  {id:'f2',comm:'oil',   name:'Petróleo',  margin:1200, mult:1.1},
+  {id:'f3',comm:'coffee',name:'Café',      margin:600,  mult:1.12},
+  {id:'f4',comm:'gold',  name:'Oro',       margin:2000, mult:1.06},
+  {id:'f5',comm:'coal',  name:'Carbón',    margin:700,  mult:1.09},
+  {id:'f6',comm:'litio', name:'Litio',     margin:3000, mult:1.15},
 ];
 
 const OPTIONS_DEF = [
-  {id:'o1',comm:'corn',  name:'Maíz',  type:'CALL',strikeAdj:1.07,prima:220},
-  {id:'o2',comm:'corn',  name:'Maíz',  type:'PUT', strikeAdj:.93, prima:190},
-  {id:'o3',comm:'oil',   name:'Petróleo',type:'CALL',strikeAdj:1.08,prima:340},
-  {id:'o4',comm:'oil',   name:'Petróleo',type:'PUT', strikeAdj:.92, prima:310},
-  {id:'o5',comm:'coffee',name:'Café',  type:'CALL',strikeAdj:1.1, prima:150},
-  {id:'o6',comm:'gold',  name:'Oro',   type:'PUT', strikeAdj:.95, prima:500},
-  {id:'o7',comm:'litio', name:'Litio', type:'PUT', strikeAdj:.9,  prima:800},
-  {id:'o8',comm:'gas',   name:'Gas',   type:'CALL',strikeAdj:1.12,prima:280},
+  {id:'o1',comm:'corn',  name:'Maíz',      type:'CALL',strikeAdj:1.07,prima:220},
+  {id:'o2',comm:'corn',  name:'Maíz',      type:'PUT', strikeAdj:.93, prima:190},
+  {id:'o3',comm:'oil',   name:'Petróleo',  type:'CALL',strikeAdj:1.08,prima:340},
+  {id:'o4',comm:'oil',   name:'Petróleo',  type:'PUT', strikeAdj:.92, prima:310},
+  {id:'o5',comm:'coffee',name:'Café',      type:'CALL',strikeAdj:1.1, prima:150},
+  {id:'o6',comm:'gold',  name:'Oro',       type:'PUT', strikeAdj:.95, prima:500},
+  {id:'o7',comm:'litio', name:'Litio',     type:'PUT', strikeAdj:.9,  prima:800},
+  {id:'o8',comm:'gas',   name:'Gas Natural',type:'CALL',strikeAdj:1.12,prima:280},
 ];
+
+// Assign random expiry (1–5 game-days, before day 6) at game start
+function assignFutureDays(){
+  var fpool = [1,2,3,4,5,2,3];
+  fpool.sort(function(){ return Math.random()-.5; });
+  FUTURES_DEF.forEach(function(f, i){
+    var d = fpool[i];
+    f.daysLeft = d;
+    f.venc = 'Vence en ' + d + (d===1?' día':' días');
+  });
+  var opool = [1,2,3,4,5,1,2,3];
+  opool.sort(function(){ return Math.random()-.5; });
+  OPTIONS_DEF.forEach(function(o, i){
+    var d = opool[i];
+    o.daysLeft = d;
+    o.venc = 'Vence en ' + d + (d===1?' día':' días');
+  });
+}
 
 // ======================================================
 // STATE
@@ -749,12 +774,13 @@ let popupTimer = null;
 let popupQueue = [];
 let popupShowing = false;
 let crisisStarted = false;
+let lastDayNum = 1;
 let crisisAlertShown = false;
 let preCrisisWarnings = 0;
 
 function initG(){
   G = {
-    money:50000,
+    money:80000,
     trm:4200,
     reputation:50,
     timeLeft:900, // 15 minutes
@@ -764,14 +790,18 @@ function initG(){
     hedges:[],
     activeLogistics:[],
     blockedComms:{},
+    logisticQueue:[],
+    logisticFired:0,
+    purchasedOptions:[],
+    logisticCount:0,
     priceBonus:{},
     tradeLog:[],
     contracts:[],
     freeHedges:0,
     stats:{trades:0,hedgeOK:0,exports:0,futures:0},
-    prevMoney:50000,
+    prevMoney:80000,
     prevPortfolio:0,
-    prevTotal:50000,
+    prevTotal:80000,
     prevTrm:4200,
   };
   COMMODITIES.forEach(c=>{
@@ -813,6 +843,7 @@ function selectRole(i){
 function startGame(){
   if(selectedRole===null) return;
   initG();
+  assignFutureDays();
   ROLES[selectedRole].apply(G);
   showScreen('screen-game');
   gameRunning=true;
@@ -909,6 +940,89 @@ function updateTrmMetric(){
 // ======================================================
 // TIMER
 // ======================================================
+
+// ======================================================
+// CONTRACT SETTLEMENT
+// ======================================================
+function settleContracts(currentDay){
+  // Settle futures whose daysLeft < currentDay (they've expired)
+  var remaining = [];
+  G.contracts.forEach(function(ct){
+    if(ct.daysLeft < currentDay){
+      var qty = ct.qty || 1;
+      var curRef = G.pricePrev[ct.comm] * ct.mult;
+      // P&L per contract × qty
+      var pnlPerUnit = curRef - ct.bought;
+      var totalPnl = Math.round(pnlPerUnit * qty);
+      var marginBack = ct.totalMargin || (ct.margin * qty);
+      var total = marginBack + totalPnl;
+      if(total < 0) total = 0; // max loss = margin posted
+      G.money += total;
+      var c = COMMODITIES.find(function(x){return x.id===ct.comm;});
+      var qStr = qty > 1 ? ' ('+qty+' contratos)' : '';
+      if(totalPnl >= 0){
+        addLog('good','💰 Futuro '+c.icon+' '+ct.name+qStr+' liquidado. Ganancia: +$'+totalPnl.toLocaleString()+' | Margen devuelto: $'+marginBack.toLocaleString()+' | Total recibido: $'+total.toLocaleString());
+        G.reputation = Math.min(100, G.reputation + 2);
+      } else {
+        var loss = Math.min(Math.abs(totalPnl), marginBack);
+        addLog('bad','📉 Futuro '+c.icon+' '+ct.name+qStr+' liquidado en pérdida: -$'+loss.toLocaleString()+' | Recuperado: $'+Math.max(0,total).toLocaleString());
+      }
+      queuePopup({
+        title: (totalPnl>=0?'💰':'📉')+' Futuro '+ct.name+' liquidado',
+        desc: qty+' contrato'+(qty>1?'s':'')+' | Entrada: $'+ct.bought.toFixed(2)+' → Salida: $'+curRef.toFixed(2)+' | '+(totalPnl>=0?'+':'')+totalPnl.toLocaleString(),
+        effects: null
+      }, totalPnl>=0 ? 'global' : 'logistic');
+    } else {
+      remaining.push(ct);
+    }
+  });
+  G.contracts = remaining;
+
+  // Settle options whose daysLeft < currentDay
+  var remOpts = [];
+  G.purchasedOptions.forEach(function(op){
+    if(op.daysLeft < currentDay){
+      var qty = op.qty || 1;
+      var curPrice = G.pricePrev[op.comm];
+      var c = COMMODITIES.find(function(x){return x.id===op.comm;});
+      var inMoney = op.type==='CALL' ? curPrice > op.strike : curPrice < op.strike;
+      var qStr = qty > 1 ? ' ('+qty+' contratos)' : '';
+      if(inMoney){
+        var payoffPerUnit = Math.abs(curPrice - op.strike);
+        var totalPayoff = Math.round(payoffPerUnit * qty);
+        var totalPrima = op.totalPrima || (op.prima * qty);
+        var net = totalPayoff - totalPrima;
+        G.money += totalPayoff;
+        if(net >= 0){
+          addLog('good','💰 Opción '+op.type+' '+c.icon+' '+c.name+qStr+' ejercida! Cobrado: $'+totalPayoff.toLocaleString()+' | Neto: +$'+net.toLocaleString());
+        } else {
+          addLog('warn','⚙️ Opción '+op.type+' '+c.icon+' '+c.name+qStr+' ejercida — neto negativo: -$'+Math.abs(net).toLocaleString()+' (prima superó el payoff)');
+        }
+        queuePopup({
+          title: '💰 Opción '+op.type+' '+c.name+qStr+' ejercida',
+          desc: 'Strike: $'+op.strike.toFixed(2)+' | Precio: $'+curPrice.toFixed(2)+' | Cobrado: $'+totalPayoff.toLocaleString()+' | Neto: '+(net>=0?'+':'')+net.toLocaleString(),
+          effects: null
+        }, 'global');
+      } else {
+        var totalPrima2 = op.totalPrima || (op.prima * qty);
+        addLog('bad','❌ Opción '+op.type+' '+c.icon+' '+c.name+qStr+' venció sin valor. Prima perdida: $'+totalPrima2.toLocaleString());
+        queuePopup({
+          title: '❌ Opción '+op.type+' '+c.name+' venció sin valor',
+          desc: qty+' contrato'+(qty>1?'s':'')+' | Strike: $'+op.strike.toFixed(2)+' | Precio: $'+curPrice.toFixed(2)+' | Prima perdida: $'+totalPrima2.toLocaleString(),
+          effects: null
+        }, 'logistic');
+      }
+    } else {
+      remOpts.push(op);
+    }
+  });
+  G.purchasedOptions = remOpts;
+
+  updatePortfolioMetric();
+  if(tab==='portafolio') renderPortafolio();
+  if(tab==='chicago') renderChicago();
+}
+
 function getGameDate(){
   const elapsed = 900 - G.timeLeft;
   const dayNum = Math.floor(elapsed / 150) + 1; // 1 day = 150s
@@ -931,6 +1045,10 @@ function tickTimer(){
   const gd = getGameDate();
   document.getElementById('m-date').textContent = gd.str;
   document.getElementById('d-date').textContent = 'Día '+gd.dayNum+' de 6';
+  if(gd.dayNum !== lastDayNum){
+    lastDayNum = gd.dayNum;
+    settleContracts(gd.dayNum);
+  }
   
   const isCrisis = G.timeLeft <= 180;
   const isPreCrisis = G.timeLeft <= 240 && G.timeLeft > 180;
@@ -1015,7 +1133,14 @@ function fireGlobalEvent(){
 
 function fireLogisticEvent(){
   if(!gameRunning) return;
-  const ev = LOGISTIC_EVENTS[Math.floor(Math.random()*LOGISTIC_EVENTS.length)];
+  // Max 5 logistic events per game
+  if(G.logisticFired>=5) return;
+  G.logisticFired++;
+  // No-repeat: shuffle through all events before repeating
+  if(!G.logisticQueue||G.logisticQueue.length===0){
+    G.logisticQueue = LOGISTIC_EVENTS.slice().sort(function(){return Math.random()-.5;});
+  }
+  const ev = G.logisticQueue.shift();
   const comms = ev.comm.split(',');
   const instance = {...ev, remaining:72, comms}; // 72 ticks × 5s = 6 min window
   G.activeLogistics.push(instance);
@@ -1087,7 +1212,7 @@ function showNextPopup(){
 function renderAll(){
   renderMarket();
   renderCharts();
-  renderInventario();
+  renderPortafolio();
   renderChicago();
   renderCoberturas();
   renderLogistica();
@@ -1210,77 +1335,189 @@ function closeChartModal(){
 // ======================================================
 // INVENTARIO
 // ======================================================
-function renderInventario(){
+function renderPortafolio(){
   const grid = document.getElementById('inv-grid');
   if(!grid) return;
   const items = COMMODITIES.filter(c=>G.inventory[c.id]>0);
-  if(!items.length){ grid.innerHTML='<div class="empty-state">Sin inventario. Comprá en el Mercado.</div>'; return; }
-  grid.innerHTML = items.map(c=>{
-    const qty = G.inventory[c.id];
-    const price = G.pricePrev[c.id];
-    const val = qty*price;
-    return `<div class="inv-card">
-      <h4>${c.icon} ${c.name}</h4>
-      <div class="inv-val">Cantidad: <span>${qty} ${c.unit}s</span></div>
-      <div class="inv-val">Precio actual: <span>$${price.toFixed(2)}</span></div>
-      <div class="inv-val">Valor: <span style="color:var(--green)">$${Math.round(val).toLocaleString()}</span></div>
-    </div>`;
-  }).join('');
+  const hasFutures = G.contracts.length > 0;
+  const hasOptions = G.purchasedOptions && G.purchasedOptions.length > 0;
+
+  if(!items.length && !hasFutures && !hasOptions){
+    grid.innerHTML='<div class="empty-state">Portafolio vacío. Comprá commodities o contratos en el Mercado y Chicago.</div>';
+    return;
+  }
+
+  let html = '';
+
+  // Section: Commodities
+  if(items.length){
+    html += '<div style="grid-column:1/-1"><div class="section-title" style="margin-bottom:.5rem">🌽 Commodities físicos</div></div>';
+    items.forEach(function(c){
+      const qty = G.inventory[c.id];
+      const price = G.pricePrev[c.id];
+      const val = qty*price;
+      const blocked = G.blockedComms[c.id]>0;
+      html += '<div class="inv-card" style="border-color:'+(blocked?'var(--red)':'var(--border)')+'">';
+      html += '<h4>'+c.icon+' '+c.name+(blocked?' <span style="color:var(--red);font-size:.7rem">🔒 Bloqueado</span>':'')+'</h4>';
+      html += '<div class="inv-val">Cantidad: <span>'+qty+' '+c.unit+'s</span></div>';
+      html += '<div class="inv-val">Precio: <span>$'+price.toFixed(2)+'</span></div>';
+      html += '<div class="inv-val">Valor: <span style="color:var(--green)">$'+Math.round(val).toLocaleString()+'</span></div>';
+      html += '</div>';
+    });
+  }
+
+  // Section: Futures contracts
+  if(hasFutures){
+    html += '<div style="grid-column:1/-1;margin-top:1rem"><div class="section-title" style="margin-bottom:.5rem">📅 Contratos de Futuros</div></div>';
+    G.contracts.forEach(function(ct, i){
+      const c = COMMODITIES.find(function(x){return x.id===ct.comm;});
+      const curPrice = G.pricePrev[ct.comm] * ct.mult;
+      const pnl = (curPrice - ct.bought);
+      const pnlColor = pnl>=0?'var(--green)':'var(--red)';
+      const pnlStr = (pnl>=0?'+':'') + '$'+pnl.toFixed(2);
+      html += '<div class="inv-card" style="border-color:var(--purple)">';
+      html += '<h4 style="color:var(--purple)">📅 '+c.icon+' '+ct.name+'</h4>';
+      var qty = ct.qty || 1;
+      var totalPnl = Math.round(pnl * qty);
+      var totalPnlStr = (totalPnl>=0?'+':'')+totalPnl.toLocaleString();
+      var totalPnlColor = totalPnl>=0?'var(--green)':'var(--red)';
+      html += '<div class="inv-val">Contratos: <span>'+qty+'</span></div>';
+      html += '<div class="inv-val">Precio entrada: <span>$'+ct.bought.toFixed(2)+'</span></div>';
+      html += '<div class="inv-val">Precio ref. actual: <span>$'+curPrice.toFixed(2)+'</span></div>';
+      html += '<div class="inv-val">P&L por contrato: <span style="color:'+pnlColor+'">'+pnlStr+'</span></div>';
+      html += '<div class="inv-val">P&L total: <span style="color:'+totalPnlColor+';font-weight:700">$'+totalPnlStr+'</span></div>';
+      html += '<div class="inv-val">Vencimiento: <span style="color:var(--teal)">'+ct.venc+'</span></div>';
+      html += '<div class="inv-val">Margen total: <span style="color:var(--amber)">$'+(ct.totalMargin||ct.margin).toLocaleString()+'</span></div>';
+      html += '</div>';
+    });
+  }
+
+  // Section: Options
+  if(hasOptions){
+    html += '<div style="grid-column:1/-1;margin-top:1rem"><div class="section-title" style="margin-bottom:.5rem">⚙️ Opciones compradas</div></div>';
+    G.purchasedOptions.forEach(function(op){
+      const c = COMMODITIES.find(function(x){return x.id===op.comm;});
+      const typeColor = op.type==='CALL'?'var(--green)':'var(--red)';
+      const curPrice = G.pricePrev[op.comm];
+      const strike = op.strike;
+      const inMoney = op.type==='CALL' ? curPrice > strike : curPrice < strike;
+      html += '<div class="inv-card" style="border-color:'+typeColor+'">';
+      html += '<h4 style="color:'+typeColor+'">⚙️ '+op.type+' '+c.icon+' '+c.name+'</h4>';
+      html += '<div class="inv-val">Strike: <span>$'+strike.toFixed(2)+'</span></div>';
+      html += '<div class="inv-val">Precio actual: <span>$'+curPrice.toFixed(2)+'</span></div>';
+      html += '<div class="inv-val">Estado: <span style="color:'+(inMoney?'var(--green)':'var(--red)')+'">'+( inMoney?'✅ In the money':'❌ Out of money')+'</span></div>';
+      var oQty = op.qty || 1;
+      html += '<div class="inv-val">Contratos: <span>'+oQty+'</span></div>';
+      html += '<div class="inv-val">Vence en: <span style="color:var(--teal)">'+op.daysLeft+(op.daysLeft===1?' día':' días')+'</span></div>';
+      html += '<div class="inv-val">Prima total: <span style="color:var(--amber)">$'+(op.totalPrima||op.prima).toLocaleString()+'</span></div>';
+      var potPayoff = Math.round(Math.abs(G.pricePrev[op.comm] - op.strike) * oQty);
+      html += '<div class="inv-val">Payoff potencial: <span style="color:'+(inMoney?'var(--green)':'var(--text2)')+'">$'+potPayoff.toLocaleString()+'</span></div>';
+      html += '</div>';
+    });
+  }
+
+  grid.innerHTML = html;
 }
 
 // ======================================================
 // CHICAGO
 // ======================================================
 function renderChicago(){
-  const fb = document.getElementById('futures-body');
-  const ob = document.getElementById('options-body');
+  var fb = document.getElementById("futures-body");
+  var ob = document.getElementById("options-body");
   if(!fb||!ob) return;
-  fb.innerHTML = FUTURES_DEF.map(f=>{
-    const c=COMMODITIES.find(x=>x.id===f.comm);
-    const fp = G.pricePrev[f.comm]*f.mult;
-    const owned = G.contracts.filter(x=>x.id===f.id).length;
-    return `<tr>
-      <td>${c.icon} ${f.name}</td>
-      <td style="color:var(--text2);font-size:.78rem">${f.venc}</td>
-      <td class="price-cell">$${fp.toFixed(2)}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">$${f.margin.toLocaleString()}</td>
-      <td><button class="btn-contract" onclick="buyFuture('${f.id}')">${owned>0?'('+owned+') ':''}Contratar</button></td>
-    </tr>`;
-  }).join('');
-  ob.innerHTML = OPTIONS_DEF.map(o=>{
-    const c=COMMODITIES.find(x=>x.id===o.comm);
-    const strike=(G.pricePrev[o.comm]*o.strikeAdj).toFixed(2);
-    return `<tr>
-      <td>${c.icon} ${o.name}</td>
-      <td style="color:${o.type==='CALL'?'var(--green)':'var(--red)'};font-weight:600">${o.type}</td>
-      <td class="price-cell">$${strike}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:var(--amber)">$${o.prima}</td>
-      <td><button class="btn-contract" onclick="buyOption('${o.id}')">Comprar</button></td>
-    </tr>`;
-  }).join('');
-}
 
+  // FUTURES
+  var frows = "";
+  for(var fi=0; fi<FUTURES_DEF.length; fi++){
+    var f = FUTURES_DEF[fi];
+    var c = COMMODITIES.find(function(x){ return x.id===f.comm; });
+    var refPrice = (G.pricePrev[f.comm] * f.mult).toFixed(2);
+    var owned = G.contracts.filter(function(x){ return x.id===f.id; }).length;
+    var ownedStr = owned > 0 ? "("+owned+") " : "";
+    var vencStr = f.venc || "Vence en 1 día";
+    frows += "<tr>";
+    frows += "<td>" + c.icon + " " + f.name + "</td>";
+    frows += "<td style='color:var(--teal);font-size:.8rem'>" + vencStr + "</td>";
+    frows += "<td class='price-cell' style='color:var(--text2)'>$" + refPrice + "</td>";
+    var inputHtml = "<input class='future-price-input' id='fp-input-" + f.id + "' type='number' value='" + refPrice + "' min='0.01' step='0.01' title='Precio de entrada'>";
+    var qtyHtml = "<input class='future-price-input' id='fq-input-" + f.id + "' type='number' value='1' min='1' max='50' step='1' style='width:55px' title='Contratos'>";
+    frows += "<td>" + inputHtml + "</td>";
+    frows += "<td>" + qtyHtml + "</td>";
+    var maxQ = Math.floor(G.money / f.margin);
+    frows += "<td style='color:var(--amber);font-family:monospace'>$" + f.margin.toLocaleString() + " <small style='color:var(--text2);font-size:.65rem'>x cant</small></td>";
+    frows += "<td><button class='btn-contract' data-fid='" + f.id + "'>" + ownedStr + "Contratar</button></td>";
+    frows += "</tr>";
+  }
+  fb.innerHTML = frows;
+  fb.querySelectorAll(".btn-contract").forEach(function(btn){
+    btn.addEventListener("click", function(){ buyFuture(this.getAttribute("data-fid")); });
+  });
+
+  // OPTIONS
+  var orows = "";
+  for(var oi=0; oi<OPTIONS_DEF.length; oi++){
+    var o = OPTIONS_DEF[oi];
+    var oc = COMMODITIES.find(function(x){ return x.id===o.comm; });
+    var strike = (G.pricePrev[o.comm] * o.strikeAdj).toFixed(2);
+    var typeColor = o.type==="CALL" ? "var(--green)" : "var(--red)";
+    var vDays = o.daysLeft;
+    var vStr = "Vence en " + vDays + (vDays===1?" día":" días");
+    orows += "<tr>";
+    orows += "<td>" + oc.icon + " " + o.name + "</td>";
+    orows += "<td style='color:" + typeColor + ";font-weight:600'>" + o.type + "</td>";
+    orows += "<td style='color:var(--teal);font-size:.8rem'>" + vStr + "</td>";
+    orows += "<td class='price-cell'>$" + strike + "</td>";
+    orows += "<td style='color:var(--amber);font-family:monospace'>$" + o.prima + "</td>";
+    var oqHtml = "<input class='future-price-input' id='oq-input-" + o.id + "' type='number' value='1' min='1' max='50' step='1' style='width:55px' title='Cantidad'>";
+    orows += "<td>" + oqHtml + "</td>";
+    var obtn = "<button class='btn-contract' data-oid='" + o.id + "'>Comprar</button>";
+    orows += "<td>" + obtn + "</td>";
+    orows += "</tr>";
+  }
+  ob.innerHTML = orows;
+  ob.querySelectorAll(".btn-contract").forEach(function(btn){
+    btn.addEventListener("click", function(){ buyOption(this.getAttribute("data-oid")); });
+  });
+}
 function buyFuture(id){
-  const f=FUTURES_DEF.find(x=>x.id===id);
+  const f=FUTURES_DEF.find(function(x){return x.id===id;});
   if(!f) return;
-  if(G.money<f.margin){ addLog('bad','❌ Capital insuficiente para el margen'); return; }
-  G.money-=f.margin;
-  G.contracts.push({...f, bought: G.pricePrev[f.comm]});
+  const inputEl = document.getElementById('fp-input-'+f.id);
+  const qtyEl = document.getElementById('fq-input-'+f.id);
+  const customPrice = inputEl ? parseFloat(inputEl.value) : G.pricePrev[f.comm]*f.mult;
+  const qty = qtyEl ? Math.max(1, parseInt(qtyEl.value)||1) : 1;
+  if(!customPrice||customPrice<=0){ addLog('bad','❌ Precio inválido'); return; }
+  const totalMargin = f.margin * qty;
+  if(G.money < totalMargin){ addLog('bad','❌ Capital insuficiente. Necesitás $'+totalMargin.toLocaleString()+' ('+qty+' contratos × $'+f.margin.toLocaleString()+')'); return; }
+  const refPrice = G.pricePrev[f.comm]*f.mult;
+  const priceDiff = ((customPrice - refPrice)/refPrice*100).toFixed(1);
+  const priceNote = customPrice < refPrice ? ' (−'+Math.abs(priceDiff)+'% vs mercado)' : customPrice > refPrice ? ' (+'+priceDiff+'% vs mercado)' : '';
+  G.money -= totalMargin;
+  // Push one contract entry with qty embedded
+  G.contracts.push(Object.assign({}, f, {bought: customPrice, qty: qty, totalMargin: totalMargin}));
   G.stats.futures++;
-  addLog('info','📅 Futuro '+f.name+' contratado. Margen: $'+f.margin.toLocaleString());
+  addLog('info','📅 Futuro '+f.name+' — '+qty+' contrato'+(qty>1?'s':'')+' a $'+customPrice.toFixed(2)+priceNote+'. Margen total: $'+totalMargin.toLocaleString()+'. Vence: '+f.venc);
   updatePortfolioMetric();
   if(tab==='chicago') renderChicago();
+  if(tab==='portafolio') renderPortafolio();
 }
 
 function buyOption(id){
-  const o=OPTIONS_DEF.find(x=>x.id===id);
+  const o=OPTIONS_DEF.find(function(x){return x.id===id;});
   if(!o) return;
-  if(G.money<o.prima){ addLog('bad','❌ Capital insuficiente para la prima'); return; }
-  G.money-=o.prima;
+  const qtyEl = document.getElementById('oq-input-'+o.id);
+  const qty = qtyEl ? Math.max(1, parseInt(qtyEl.value)||1) : 1;
+  const totalPrima = o.prima * qty;
+  if(G.money < totalPrima){ addLog('bad','❌ Capital insuficiente. Necesitás $'+totalPrima.toLocaleString()+' ('+qty+' × $'+o.prima+')'); return; }
+  G.money -= totalPrima;
   G.stats.futures++;
-  const c=COMMODITIES.find(x=>x.id===o.comm);
-  addLog('info','⚙️ Opción '+o.type+' '+c.name+' comprada. Prima: $'+o.prima);
+  const c=COMMODITIES.find(function(x){return x.id===o.comm;});
+  const strike = G.pricePrev[o.comm] * o.strikeAdj;
+  G.purchasedOptions.push(Object.assign({}, o, {strike: strike, qty: qty, totalPrima: totalPrima}));
+  addLog('info','⚙️ Opción '+o.type+' '+c.name+' — '+qty+' contrato'+(qty>1?'s':'')+'. Strike: $'+strike.toFixed(2)+'. Prima total: $'+totalPrima.toLocaleString()+'. Vence en '+o.daysLeft+(o.daysLeft===1?' día':' días'));
   updatePortfolioMetric();
+  if(tab==='portafolio') renderPortafolio();
 }
 
 // ======================================================
@@ -1525,7 +1762,7 @@ function confirmTrade(){
   }
   
   updatePortfolioMetric();
-  if(tab==='inventario') renderInventario();
+  if(tab==='portafolio') renderPortafolio();
   if(tab==='mercado') renderMarket();
   closeTradeModal();
 }
@@ -1540,14 +1777,14 @@ function closeTradeModal(){
 function switchTab(t){
   tab=t;
   document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    const ts=['mercado','graficos','inventario','chicago','coberturas','logistica','conceptos','bitacora'];
+    const ts=['mercado','graficos','portafolio','chicago','coberturas','logistica','conceptos','bitacora'];
     b.classList.toggle('active',ts[i]===t);
   });
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   
   if(t==='graficos'){ renderCharts(); }
-  else if(t==='inventario') renderInventario();
+  else if(t==='portafolio') renderPortafolio();
   else if(t==='chicago') renderChicago();
   else if(t==='coberturas') renderCoberturas();
   else if(t==='logistica') renderLogistica();
@@ -1610,9 +1847,9 @@ function endGame(){
   const score=G.money+pf+G.reputation*300+G.stats.hedgeOK*1500+G.stats.trades*100+G.stats.exports*250+G.stats.futures*200;
   
   let rank;
-  if(score>95000) rank={icon:'🏆',title:'Rey del Mercado Global',sub:'Desempeño excepcional'};
-  else if(score>65000) rank={icon:'🥇',title:'Director de Trading',sub:'Alto rendimiento y gestión de riesgo'};
-  else if(score>42000) rank={icon:'🥈',title:'Gerente de Commodities',sub:'Buen manejo con margen de mejora'};
+  if(score>200000) rank={icon:'🏆',title:'Rey del Mercado Global',sub:'Desempeño excepcional'};
+  else if(score>150000) rank={icon:'🥇',title:'Director de Trading',sub:'Alto rendimiento y gestión de riesgo'};
+  else if(score>80000) rank={icon:'🥈',title:'Gerente de Commodities',sub:'Buen manejo con margen de mejora'};
   else rank={icon:'🥉',title:'Comerciante Local',sub:'El mercado global tiene mucho por enseñarte'};
   
   document.getElementById('end-icon').textContent=rank.icon;
@@ -1630,8 +1867,8 @@ function endGame(){
   if(rn) an+='Jugaste como '+rn+'. ';
   if(!G.stats.hedgeOK) an+='No activaste coberturas — la crisis impactó directo en tu portafolio. ';
   else an+='Tus '+G.stats.hedgeOK+' coberturas te protegieron en la crisis mundial. ';
-  if(G.money>65000) an+='Excelente gestión del capital. ';
-  else if(G.money<35000) an+='El capital cayó significativamente — revisá la estrategia. ';
+  if(G.money>160000) an+='Excelente gestión del capital. ';
+  else if(G.money<120000) an+='El capital cayó significativamente — revisá la estrategia. ';
   an+='Recordá: el maíz (CME) es volátil y global; el arroz (regulado) es predecible y local.';
   document.getElementById('end-analysis').textContent=an;
   
